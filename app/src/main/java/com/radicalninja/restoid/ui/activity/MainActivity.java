@@ -91,9 +91,15 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_send:
+                if (mViewPager.getCurrentItem() != 0) {
+                    mViewPager.setCurrentItem(0);
+                }
+                // TODO: Post the request to the URL.
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
