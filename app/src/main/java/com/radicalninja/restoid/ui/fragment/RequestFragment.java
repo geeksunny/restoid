@@ -55,4 +55,8 @@ public class RequestFragment extends Fragment {
     public void responseReceived(ApiResponseEvent event) {
         mResults.setText(event.response);
     }
+
+    public UrlEntry getUrlEntry() {
+        return new UrlEntry(mUrl.getText().toString());
+    }
 }
