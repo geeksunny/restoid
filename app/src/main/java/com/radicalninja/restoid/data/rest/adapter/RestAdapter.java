@@ -4,6 +4,9 @@ import android.util.Pair;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
+import com.radicalninja.restoid.application.App;
+import com.radicalninja.restoid.data.rest.LenientGsonConverter;
 import com.radicalninja.restoid.data.rest.client.RestClient;
 import com.radicalninja.restoid.data.rest.interceptor.AuthenticationInterceptor;
 
@@ -14,9 +17,9 @@ import retrofit.converter.GsonConverter;
 
 public class RestAdapter {
 
-    private static RestAdapter instance;
+    private static RestAdapter sInstance;
+    private static AuthenticationInterceptor sAuthenticationInterceptor = null;
 
-    private static AuthenticationInterceptor mAuthenticationInterceptor = null;
     private retrofit.RestAdapter mRestAdapter = null;
     private RestClient mRestClient = null;
 
@@ -32,10 +35,10 @@ public class RestAdapter {
     }
 
     public static RestAdapter getInstance() {
-        if (null == instance) {
-            instance = new RestAdapter();
+        if (null == sInstance) {
+            sInstance = new RestAdapter();
         }
-        return instance;
+        return sInstance;
     }
 
     public RestClient getRestClient() {
@@ -52,17 +55,18 @@ public class RestAdapter {
         Gson gson = gsonBuilder.create();
 
         // Rest Adapter
-        mAuthenticationInterceptor = AuthenticationInterceptor.getInstance();
+        sAuthenticationInterceptor = AuthenticationInterceptor.getInstance();
         mRestAdapter = new retrofit.RestAdapter.Builder()
-                .setEndpoint("")
-                .setRequestInterceptor(mAuthenticationInterceptor)
+                .setEndpoint(App.getEndpoint())
+                .setRequestInterceptor(sAuthenticationInterceptor)
                 .setLogLevel(retrofit.RestAdapter.LogLevel.FULL)
-                .setConverter(new GsonConverter(gson))
+                //.setConverter(new GsonConverter(gson))
+                .setConverter(new LenientGsonConverter(gson))
                 .build();
         mRestClient = mRestAdapter.create(RestClient.class);
 
         for(Pair<String, String> headerPair : mRequiredHeaders) {
-            mAuthenticationInterceptor.addHeader(headerPair.first, headerPair.second);
+            sAuthenticationInterceptor.addHeader(headerPair.first, headerPair.second);
         }
     }
 }

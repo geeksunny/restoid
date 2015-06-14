@@ -12,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.radicalninja.restoid.R;
+import com.radicalninja.restoid.application.App;
+import com.radicalninja.restoid.data.rest.api.Api;
 import com.radicalninja.restoid.ui.fragment.BodyFragment;
 import com.radicalninja.restoid.ui.fragment.HeadersFragment;
 import com.radicalninja.restoid.ui.fragment.OtherSettingsFragment;
@@ -99,6 +101,9 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     mViewPager.setCurrentItem(0);
                 }
                 // TODO: Post the request to the URL.
+                Api api = new Api();
+                //App.getEndpoint().setUrl();
+                api.submitGET("");
                 return true;
         }
 

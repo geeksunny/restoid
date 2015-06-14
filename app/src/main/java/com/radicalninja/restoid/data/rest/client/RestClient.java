@@ -6,6 +6,6 @@ import retrofit.http.Path;
 
 public interface RestClient {
 
-    @GET("{endpoint}")
-    public void getEndpoint(@Path("endpoint") final String endpoint, Callback callback);
+    @GET("/{endpoint}")
+    public void getEndpoint(@Path("endpoint") final String endpoint, Callback<Object> callback);
 }
