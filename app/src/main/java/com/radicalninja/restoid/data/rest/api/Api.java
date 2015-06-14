@@ -27,4 +27,46 @@ public class Api {
         });
     }
 
+    public void submitPOST(String url) {
+        client.postEndpoint(url, new Callback<Object>() {
+            @Override
+            public void success(Object o, Response response) {
+                App.getOttoBus().post(new ApiResponseEvent(response.getBody().toString()));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                App.getOttoBus().post(new ApiResponseEvent(error.toString()));
+            }
+        });
+    }
+
+    public void submitPATCH(String url) {
+        client.patchEndpoint(url, new Callback<Object>() {
+            @Override
+            public void success(Object o, Response response) {
+                App.getOttoBus().post(new ApiResponseEvent(response.getBody().toString()));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                App.getOttoBus().post(new ApiResponseEvent(error.toString()));
+            }
+        });
+    }
+
+    public void submitDELETE(String url) {
+        client.deleteEndpoint(url, new Callback<Object>() {
+            @Override
+            public void success(Object o, Response response) {
+                App.getOttoBus().post(new ApiResponseEvent(response.getBody().toString()));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                App.getOttoBus().post(new ApiResponseEvent(error.toString()));
+            }
+        });
+    }
+
 }
