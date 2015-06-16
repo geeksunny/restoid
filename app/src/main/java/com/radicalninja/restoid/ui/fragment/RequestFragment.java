@@ -20,6 +20,10 @@ import com.squareup.otto.Subscribe;
 
 public class RequestFragment extends Fragment {
 
+    public enum RequestType {
+        GET, POST, PATCH, DELETE
+    }
+
     private static final String BUNDLE_KEY_URL = "URL";
     private static final String BUNDLE_KEY_REQUEST_TYPE = "RequestType";
     private static final String BUNDLE_KEY_RESULTS_TYPE = "ResultsType";
@@ -94,4 +98,20 @@ public class RequestFragment extends Fragment {
     public UrlEntry getUrlEntry() {
         return new UrlEntry(mUrl.getText().toString());
     }
+
+    public RequestType getRequestType() {
+        Log.d("RequestFragment", "Selected request type ID: "+mRequestTypes.getCheckedRadioButtonId());
+        switch (mRequestTypes.getCheckedRadioButtonId()) {
+            case R.id.request_post:
+                return RequestType.POST;
+            case R.id.request_patch:
+                return RequestType.PATCH;
+            case R.id.request_delete:
+                return RequestType.DELETE;
+            case R.id.request_get:
+            default:
+                return RequestType.GET;
+        }
+    }
+
 }

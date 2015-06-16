@@ -9,11 +9,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.application.App;
+import com.radicalninja.restoid.data.model.UrlEntry;
 import com.radicalninja.restoid.data.rest.api.Api;
 import com.radicalninja.restoid.ui.fragment.BodyFragment;
 import com.radicalninja.restoid.ui.fragment.HeadersFragment;
@@ -101,10 +103,25 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 if (mViewPager.getCurrentItem() != 0) {
                     mViewPager.setCurrentItem(0);
                 }
-                // TODO: Post the request to the URL.
                 Api api = new Api();
-                //App.getEndpoint().setUrl();
-                api.submitGET("");
+                RequestFragment fragment = (RequestFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, 0);
+                UrlEntry entry = fragment.getUrlEntry();
+                Log.d("MainActivity", String.format("UrlEntry : %s | %s", entry.getUrlBase(), entry.getUrlPath()));
+                App.getEndpoint().setUrl(entry.getUrlBase());
+                switch (fragment.getRequestType()) {
+                    case GET:
+                        api.submitGET(entry.getUrlPath());
+                        break;
+                    case POST:
+                        api.submitPOST(entry.getUrlPath());
+                        break;
+                    case PATCH:
+                        api.submitPATCH(entry.getUrlPath());
+                        break;
+                    case DELETE:
+                        api.submitDELETE(entry.getUrlPath());
+                        break;
+                }
                 return true;
         }
 
