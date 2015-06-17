@@ -15,30 +15,21 @@ import android.view.MenuItem;
 
 import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.application.App;
+import com.radicalninja.restoid.data.model.HeaderList;
 import com.radicalninja.restoid.data.model.UrlEntry;
 import com.radicalninja.restoid.data.rest.api.Api;
 import com.radicalninja.restoid.ui.fragment.BodyFragment;
 import com.radicalninja.restoid.ui.fragment.HeadersFragment;
 import com.radicalninja.restoid.ui.fragment.OtherSettingsFragment;
 import com.radicalninja.restoid.ui.fragment.RequestFragment;
+import com.radicalninja.restoid.util.Ln;
 
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
+    private HeaderList mHeaders = new HeaderList();
     SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     ViewPager mViewPager;
 
     @Override
@@ -157,7 +148,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         public Fragment getItem(int position) {
             switch (position) {
                 case 1:
-                    return HeadersFragment.newInstance();
+                    Ln.e("Instaniating Headers Fragment");
+                    HeadersFragment fragment = HeadersFragment.newInstance();
+                    fragment.setHeaders(mHeaders);
+                    return fragment;
                 case 2:
                     return BodyFragment.newInstance();
                 case 3:

@@ -20,6 +20,7 @@
     <string name="radio_formatted">Formatted</string>
     <string name="radio_json">JSON</string>
 
+    <string name="action_add">Add</string>
     <string name="action_send">Send</string>
     <string name="action_settings">Settings</string>
 </resources>

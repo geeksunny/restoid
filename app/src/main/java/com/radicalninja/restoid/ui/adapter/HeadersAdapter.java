@@ -6,12 +6,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
 import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.data.model.HeaderEntry;
+import com.radicalninja.restoid.data.model.HeaderList;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HeadersAdapter extends RecyclerView.Adapter<HeadersAdapter.ViewHolder> {
 
@@ -25,11 +28,16 @@ public class HeadersAdapter extends RecyclerView.Adapter<HeadersAdapter.ViewHold
         }
     }
 
-    private ArrayList<HeaderEntry> mHeaders = new ArrayList<>();
+    private HeaderList mHeaders = new HeaderList();
     private Context mContext;
 
     public HeadersAdapter(Context context) {
         mContext = context;
+    }
+
+    public HeadersAdapter(Context context, HeaderList headers) {
+        mContext = context;
+        mHeaders = headers;
     }
 
     @Override
@@ -49,11 +57,11 @@ public class HeadersAdapter extends RecyclerView.Adapter<HeadersAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_header_editor, parent, false);
-        ViewHolder h = new ViewHolder(view);
+        final ViewHolder h = new ViewHolder(view);
         h.enabled = (CheckBox) view.findViewById(R.id.checkbox_is_enabled);
-        h.key = (EditText) view.findViewById(R.id.edittext_key);;
+        h.key = (EditText) view.findViewById(R.id.edittext_key);
         h.value = (EditText) view.findViewById(R.id.edittext_value);
-        return null;
+        return h;
     }
 
     @Override
@@ -64,4 +72,37 @@ public class HeadersAdapter extends RecyclerView.Adapter<HeadersAdapter.ViewHold
         vh.value.setText(entry.getValue());
     }
 
+    public HeaderList getHeaders() {
+        return mHeaders;
+    }
+
+    public void setHeaders(HeaderList headers) {
+        this.mHeaders = headers;
+        notifyDataSetChanged();
+    }
+
+    public void add(HeaderEntry headerEntry) {
+        mHeaders.add(headerEntry);
+        notifyDataSetChanged();
+    }
+
+    public void add(List<HeaderEntry> headers) {
+        mHeaders.addAll(headers);
+        notifyDataSetChanged();
+    }
+
+    public void remove(HeaderEntry headerEntry) {
+        mHeaders.remove(headerEntry);
+        notifyDataSetChanged();
+    }
+
+    public void remove(int location) {
+        mHeaders.remove(location);
+        notifyDataSetChanged();
+    }
+
+    public void removeAll(List<HeaderEntry> headers) {
+        mHeaders.removeAll(headers);
+        notifyDataSetChanged();
+    }
 }
