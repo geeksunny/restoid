@@ -2,6 +2,8 @@ package com.radicalninja.restoid.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,6 @@ import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.data.model.HeaderEntry;
 import com.radicalninja.restoid.data.model.HeaderList;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HeadersAdapter extends RecyclerView.Adapter<HeadersAdapter.ViewHolder> {
@@ -65,11 +66,46 @@ public class HeadersAdapter extends RecyclerView.Adapter<HeadersAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder vh, int i) {
-        HeaderEntry entry = getItem(i);
+    public void onBindViewHolder(ViewHolder vh, int pos) {
+        final int i = pos;
+        final HeaderEntry entry = getItem(i);
         vh.enabled.setChecked(entry.isEnabled());
+        vh.enabled.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                getItem(i).setIsEnabled(isChecked);
+            }
+        });
         vh.key.setText(entry.getKey());
+        vh.key.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                getItem(i).setKey(s.toString());
+            }
+        });
         vh.value.setText(entry.getValue());
+        vh.value.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                getItem(i).setValue(s.toString());
+            }
+        });
     }
 
     public HeaderList getHeaders() {
