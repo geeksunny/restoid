@@ -15,9 +15,11 @@ import android.view.MenuItem;
 
 import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.application.App;
+import com.radicalninja.restoid.data.model.HeaderEntry;
 import com.radicalninja.restoid.data.model.HeaderList;
 import com.radicalninja.restoid.data.model.UrlEntry;
 import com.radicalninja.restoid.data.rest.api.Api;
+import com.radicalninja.restoid.data.rest.interceptor.RestInterceptor;
 import com.radicalninja.restoid.ui.fragment.BodyFragment;
 import com.radicalninja.restoid.ui.fragment.HeadersFragment;
 import com.radicalninja.restoid.ui.fragment.OtherSettingsFragment;
@@ -91,14 +93,21 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             case R.id.action_settings:
                 return true;
             case R.id.action_send:
+                // Swap over to the first fragment...
                 if (mViewPager.getCurrentItem() != 0) {
                     mViewPager.setCurrentItem(0);
                 }
-                Api api = new Api();
+                // ... And grab a reference of that fragment for posting!
                 RequestFragment fragment = (RequestFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, 0);
                 UrlEntry entry = fragment.getUrlEntry();
-                Log.d("MainActivity", String.format("UrlEntry : %s | %s", entry.getUrlBase(), entry.getUrlPath()));
                 App.getEndpoint().setUrl(entry.getUrlBase());
+                // Send the enabled headers into the Interceptor.
+                RestInterceptor interceptor = RestInterceptor.getInstance();
+                interceptor.removeAllHeaders();
+                for (HeaderEntry header : mHeaders) {
+                    interceptor.addHeader(header.getKey(), header.getValue());
+                }
+                Api api = new Api();
                 switch (fragment.getRequestType()) {
                     case GET:
                         api.submitGET(entry.getUrlPath());

@@ -6,16 +6,16 @@ import java.util.Map;
 
 import retrofit.RequestInterceptor;
 
-public class AuthenticationInterceptor implements RequestInterceptor {
+public class RestInterceptor implements RequestInterceptor {
 
-    private static AuthenticationInterceptor mInstance = null;
+    private static RestInterceptor mInstance = null;
 
     private final Object mLock = new Object();
     private Map<String, String> mHeaders = new HashMap<String, String>();
 
-    public static AuthenticationInterceptor getInstance() {
+    public static RestInterceptor getInstance() {
         if (mInstance == null) {
-            mInstance = new AuthenticationInterceptor();
+            mInstance = new RestInterceptor();
         }
         return mInstance;
     }
@@ -35,6 +35,12 @@ public class AuthenticationInterceptor implements RequestInterceptor {
             }
         }
         return wasRemoved;
+    }
+
+    public void removeAllHeaders() {
+        synchronized (mLock) {
+            mHeaders.clear();
+        }
     }
 
     @Override

@@ -4,21 +4,18 @@ import android.util.Pair;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.stream.JsonReader;
 import com.radicalninja.restoid.application.App;
 import com.radicalninja.restoid.data.rest.LenientGsonConverter;
 import com.radicalninja.restoid.data.rest.client.RestClient;
-import com.radicalninja.restoid.data.rest.interceptor.AuthenticationInterceptor;
+import com.radicalninja.restoid.data.rest.interceptor.RestInterceptor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import retrofit.converter.GsonConverter;
-
 public class RestAdapter {
 
     private static RestAdapter sInstance;
-    private static AuthenticationInterceptor sAuthenticationInterceptor = null;
+    private static RestInterceptor sRestInterceptor = null;
 
     private retrofit.RestAdapter mRestAdapter = null;
     private RestClient mRestClient = null;
@@ -55,10 +52,10 @@ public class RestAdapter {
         Gson gson = gsonBuilder.create();
 
         // Rest Adapter
-        sAuthenticationInterceptor = AuthenticationInterceptor.getInstance();
+        sRestInterceptor = RestInterceptor.getInstance();
         mRestAdapter = new retrofit.RestAdapter.Builder()
                 .setEndpoint(App.getEndpoint())
-                .setRequestInterceptor(sAuthenticationInterceptor)
+                .setRequestInterceptor(sRestInterceptor)
                 .setLogLevel(retrofit.RestAdapter.LogLevel.FULL)
                 //.setConverter(new GsonConverter(gson))
                 .setConverter(new LenientGsonConverter(gson))
@@ -66,7 +63,7 @@ public class RestAdapter {
         mRestClient = mRestAdapter.create(RestClient.class);
 
         for(Pair<String, String> headerPair : mRequiredHeaders) {
-            sAuthenticationInterceptor.addHeader(headerPair.first, headerPair.second);
+            sRestInterceptor.addHeader(headerPair.first, headerPair.second);
         }
     }
 }
