@@ -24,6 +24,10 @@ public class RequestFragment extends Fragment {
         GET, POST, PATCH, DELETE
     }
 
+    public enum ResultType {
+        FORMATTED, JSON, RAW
+    }
+
     private static final String BUNDLE_KEY_URL = "URL";
     private static final String BUNDLE_KEY_REQUEST_TYPE = "RequestType";
     private static final String BUNDLE_KEY_RESULTS_TYPE = "ResultsType";

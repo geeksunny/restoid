@@ -31,6 +31,11 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
     private HeaderList mHeaders = new HeaderList();
+    private String mUrl;
+    private RequestFragment.RequestType mRequestType;
+    private RequestFragment.ResultType mResultType;
+    private String mBody;
+
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
 
@@ -158,11 +163,13 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             switch (position) {
                 case 1:
                     Ln.e("Instaniating Headers Fragment");
-                    HeadersFragment fragment = HeadersFragment.newInstance();
-                    fragment.setHeaders(mHeaders);
-                    return fragment;
+                    HeadersFragment headersFragment = HeadersFragment.newInstance();
+                    headersFragment.setHeaders(mHeaders);
+                    return headersFragment;
                 case 2:
-                    return BodyFragment.newInstance();
+                    BodyFragment bodyFragment = BodyFragment.newInstance();
+                    bodyFragment.setBodyString(mBody);
+                    return bodyFragment;
                 case 3:
                     return OtherSettingsFragment.newInstance();
                 case 0:

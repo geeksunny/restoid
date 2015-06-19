@@ -33,8 +33,7 @@ public class HeadersFragment extends Fragment {
         return new HeadersFragment();
     }
 
-    public HeadersFragment() {
-    }
+    public HeadersFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +72,6 @@ public class HeadersFragment extends Fragment {
     }
 
     public void setHeaders(HeaderList headerList) {
-        Ln.i("Setting Headers. Size: %d", headerList.size());
         mHeaders = headerList;
     }
 
