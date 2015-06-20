@@ -26,6 +26,7 @@ import com.radicalninja.restoid.data.rest.interceptor.RestInterceptor;
 import com.radicalninja.restoid.ui.fragment.BodyFragment;
 import com.radicalninja.restoid.ui.fragment.HeadersFragment;
 import com.radicalninja.restoid.ui.fragment.OtherSettingsFragment;
+import com.radicalninja.restoid.ui.fragment.ParamsFragment;
 import com.radicalninja.restoid.ui.fragment.RequestFragment;
 import com.radicalninja.restoid.util.Ln;
 import com.squareup.otto.Subscribe;
@@ -171,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 case 1:
                     return HeadersFragment.newInstance();
                 case 2:
+                    return ParamsFragment.newInstance();
                 case 3:
                     return BodyFragment.newInstance();
                 case 4:

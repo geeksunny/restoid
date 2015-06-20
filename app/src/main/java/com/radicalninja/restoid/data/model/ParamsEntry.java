@@ -1,18 +1,9 @@
 package com.radicalninja.restoid.data.model;
 
-public class HeaderEntry {
+public class ParamsEntry {
 
-    private boolean mIsEnabled = false;
     private String mKey;
     private String mValue;
-
-    public boolean isEnabled() {
-        return mIsEnabled;
-    }
-
-    public void setIsEnabled(boolean isEnabled) {
-        this.mIsEnabled = isEnabled;
-    }
 
     public String getKey() {
         return mKey;

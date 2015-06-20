@@ -20,14 +20,6 @@
         <RelativeLayout
             android:layout_width="match_parent" android:layout_height="match_parent">
 
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/checkbox_is_enabled"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
-
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -35,20 +27,20 @@
                 android:gravity="center"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/button_delete"
-                android:layout_toRightOf="@+id/checkbox_is_enabled"
-                android:layout_toEndOf="@+id/checkbox_is_enabled">
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" >
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/edittext_key"
-                    android:hint="@string/hint_header_key" />
+                    android:hint="@string/hint_params_key" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/edittext_value"
-                    android:hint="@string/hint_header_value" />
+                    android:hint="@string/hint_params_value" />
             </LinearLayout>
             <Button
                 style="?android:attr/buttonStyleSmall"
