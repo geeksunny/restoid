@@ -1,6 +1,6 @@
 package com.radicalninja.restoid.data.model;
 
-public class ParamsEntry {
+public class QueryEntry {
 
     private String mKey;
     private String mValue;

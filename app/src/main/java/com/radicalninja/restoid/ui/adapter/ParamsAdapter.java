@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.radicalninja.restoid.R;
-import com.radicalninja.restoid.data.model.ParamsEntry;
+import com.radicalninja.restoid.data.model.QueryEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,14 +28,14 @@ public class ParamsAdapter extends RecyclerView.Adapter<ParamsAdapter.ViewHolder
         }
     }
 
-    private List<ParamsEntry> mParams = new ArrayList<>();
+    private List<QueryEntry> mParams = new ArrayList<>();
     private Context mContext;
 
     public ParamsAdapter(Context context) {
         mContext = context;
     }
 
-    public ParamsAdapter(Context context, List<ParamsEntry> headers) {
+    public ParamsAdapter(Context context, List<QueryEntry> headers) {
         mContext = context;
         mParams = headers;
     }
@@ -45,7 +45,7 @@ public class ParamsAdapter extends RecyclerView.Adapter<ParamsAdapter.ViewHolder
         return mParams.size();
     }
 
-    public ParamsEntry getItem(int i) {
+    public QueryEntry getItem(int i) {
         return mParams.get(i);
     }
 
@@ -67,7 +67,7 @@ public class ParamsAdapter extends RecyclerView.Adapter<ParamsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder vh, final int pos) {
         final int i = pos;
-        final ParamsEntry entry = getItem(i);
+        final QueryEntry entry = getItem(i);
         vh.key.setText(entry.getKey());
         vh.key.addTextChangedListener(new TextWatcher() {
             @Override
@@ -106,23 +106,23 @@ public class ParamsAdapter extends RecyclerView.Adapter<ParamsAdapter.ViewHolder
         });
     }
 
-    public void setHeaders(List<ParamsEntry> headers) {
+    public void setHeaders(List<QueryEntry> headers) {
         this.mParams = headers;
         notifyDataSetChanged();
     }
 
-    public void add(ParamsEntry paramsEntry) {
-        mParams.add(paramsEntry);
+    public void add(QueryEntry queryEntry) {
+        mParams.add(queryEntry);
         notifyDataSetChanged();
     }
 
-    public void add(List<ParamsEntry> headers) {
+    public void add(List<QueryEntry> headers) {
         mParams.addAll(headers);
         notifyDataSetChanged();
     }
 
-    public void remove(ParamsEntry paramsEntry) {
-        mParams.remove(paramsEntry);
+    public void remove(QueryEntry queryEntry) {
+        mParams.remove(queryEntry);
         notifyDataSetChanged();
     }
 
@@ -131,7 +131,7 @@ public class ParamsAdapter extends RecyclerView.Adapter<ParamsAdapter.ViewHolder
         notifyDataSetChanged();
     }
 
-    public void removeAll(List<ParamsEntry> headers) {
+    public void removeAll(List<QueryEntry> headers) {
         mParams.removeAll(headers);
         notifyDataSetChanged();
     }

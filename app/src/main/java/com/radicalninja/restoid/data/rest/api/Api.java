@@ -6,6 +6,8 @@ import com.radicalninja.restoid.data.rest.adapter.RestAdapter;
 import com.radicalninja.restoid.data.rest.client.RestClient;
 import com.radicalninja.restoid.util.ResponseUtils;
 
+import java.util.Map;
+
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -14,60 +16,48 @@ public class Api {
 
     private RestClient client = RestAdapter.getInstance().getRestClient();
 
-    public void submitGET(String url) {
-        client.getEndpoint(url, new Callback<Object>() {
-            @Override
-            public void success(Object o, Response response) {
-                App.getOttoBus().post(new ApiResponseEvent(ResponseUtils.getResponseText(response)));
-            }
+    private Callback<Object> mCallback = new Callback<Object>() {
+        @Override
+        public void success(Object o, Response response) {
+            App.getOttoBus().post(new ApiResponseEvent(ResponseUtils.getResponseText(response)));
+        }
 
-            @Override
-            public void failure(RetrofitError error) {
-                App.getOttoBus().post(new ApiResponseEvent(error.toString()));
-            }
-        });
+        @Override
+        public void failure(RetrofitError error) {
+            App.getOttoBus().post(new ApiResponseEvent(error.toString()));
+        }
+    };
+
+    public void submitGET(String url) {
+        client.getEndpoint(url, mCallback);
+    }
+
+    public void submitGET(String url, Map<String, String> query) {
+        client.getEndpoint(url, query, mCallback);
     }
 
     public void submitPOST(String url) {
-        client.postEndpoint(url, new Callback<Object>() {
-            @Override
-            public void success(Object o, Response response) {
-                App.getOttoBus().post(new ApiResponseEvent(ResponseUtils.getResponseText(response)));
-            }
+        client.postEndpoint(url, mCallback);
+    }
 
-            @Override
-            public void failure(RetrofitError error) {
-                App.getOttoBus().post(new ApiResponseEvent(error.toString()));
-            }
-        });
+    public void submitPOST(String url, Map<String, String> query) {
+        client.postEndpoint(url, query, mCallback);
     }
 
     public void submitPATCH(String url) {
-        client.patchEndpoint(url, new Callback<Object>() {
-            @Override
-            public void success(Object o, Response response) {
-                App.getOttoBus().post(new ApiResponseEvent(ResponseUtils.getResponseText(response)));
-            }
+        client.patchEndpoint(url, mCallback);
+    }
 
-            @Override
-            public void failure(RetrofitError error) {
-                App.getOttoBus().post(new ApiResponseEvent(error.toString()));
-            }
-        });
+    public void submitPATCH(String url, Map<String, String> query) {
+        client.patchEndpoint(url, query, mCallback);
     }
 
     public void submitDELETE(String url) {
-        client.deleteEndpoint(url, new Callback<Object>() {
-            @Override
-            public void success(Object o, Response response) {
-                App.getOttoBus().post(new ApiResponseEvent(ResponseUtils.getResponseText(response)));
-            }
+        client.deleteEndpoint(url, mCallback);
+    }
 
-            @Override
-            public void failure(RetrofitError error) {
-                App.getOttoBus().post(new ApiResponseEvent(error.toString()));
-            }
-        });
+    public void submitDELETE(String url, Map<String, String> query) {
+        client.deleteEndpoint(url, query, mCallback);
     }
 
 }

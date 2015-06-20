@@ -134,20 +134,38 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         for (HeaderEntry header : mConnection.getHeaders()) {
             interceptor.addHeader(header.getKey(), header.getValue());
         }
+        // TODO: Move this switching station into a utility class.
         Api api = new Api();
-        switch (mConnection.getRequestType()) {
-            case GET:
-                api.submitGET(entry.getUrlPath());
-                break;
-            case POST:
-                api.submitPOST(entry.getUrlPath());
-                break;
-            case PATCH:
-                api.submitPATCH(entry.getUrlPath());
-                break;
-            case DELETE:
-                api.submitDELETE(entry.getUrlPath());
-                break;
+        if (mConnection.hasQuery()) {
+            switch (mConnection.getRequestType()) {
+                case GET:
+                    api.submitGET(entry.getUrlPath(), mConnection.getQuery().getQueryMap());
+                    break;
+                case POST:
+                    api.submitPOST(entry.getUrlPath(), mConnection.getQuery().getQueryMap());
+                    break;
+                case PATCH:
+                    api.submitPATCH(entry.getUrlPath(), mConnection.getQuery().getQueryMap());
+                    break;
+                case DELETE:
+                    api.submitDELETE(entry.getUrlPath(), mConnection.getQuery().getQueryMap());
+                    break;
+            }
+        } else {
+            switch (mConnection.getRequestType()) {
+                case GET:
+                    api.submitGET(entry.getUrlPath());
+                    break;
+                case POST:
+                    api.submitPOST(entry.getUrlPath());
+                    break;
+                case PATCH:
+                    api.submitPATCH(entry.getUrlPath());
+                    break;
+                case DELETE:
+                    api.submitDELETE(entry.getUrlPath());
+                    break;
+            }
         }
     }
 

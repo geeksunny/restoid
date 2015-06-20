@@ -2,16 +2,13 @@ package com.radicalninja.restoid.data.model;
 
 import com.radicalninja.restoid.ui.fragment.RequestFragment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Connection {
 
     String mUrl = "";
     RequestFragment.RequestType mRequestType = RequestFragment.RequestType.GET;
     RequestFragment.ResultType mResultType = RequestFragment.ResultType.RAW;
     HeaderList mHeaders = new HeaderList();
-    List<ParamsEntry> mParams = new ArrayList<>();
+    QueryList mQuery = new QueryList();
     String bodyText = "";
 
     public String getUrl() {
@@ -46,12 +43,16 @@ public class Connection {
         this.mHeaders = headers;
     }
 
-    public List<ParamsEntry> getParams() {
-        return mParams;
+    public QueryList getQuery() {
+        return mQuery;
     }
 
-    public void setParams(List<ParamsEntry> params) {
-        this.mParams = params;
+    public void getQuery(QueryList params) {
+        this.mQuery = params;
+    }
+
+    public boolean hasQuery() {
+        return mQuery.size() > 0;
     }
 
     public String getBodyText() {

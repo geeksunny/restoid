@@ -12,9 +12,7 @@ import android.view.ViewGroup;
 
 import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.data.model.Connection;
-import com.radicalninja.restoid.data.model.HeaderEntry;
-import com.radicalninja.restoid.data.model.ParamsEntry;
-import com.radicalninja.restoid.ui.adapter.HeadersAdapter;
+import com.radicalninja.restoid.data.model.QueryEntry;
 import com.radicalninja.restoid.ui.adapter.ParamsAdapter;
 import com.radicalninja.restoid.util.Ln;
 
@@ -63,7 +61,7 @@ public class ParamsFragment extends BaseConnectionFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_new_header) {
             if (mAdapter != null) {
-                mAdapter.add(new ParamsEntry());
+                mAdapter.add(new QueryEntry());
             }
             return true;
         }
@@ -73,6 +71,6 @@ public class ParamsFragment extends BaseConnectionFragment {
     @Override
     protected void populateConnectionInfo(Connection connection) {
         Ln.i("Populating Connection Info on HeadersFragment");
-        mAdapter.setHeaders(connection.getParams());
+        mAdapter.setHeaders(connection.getQuery());
     }
 }
