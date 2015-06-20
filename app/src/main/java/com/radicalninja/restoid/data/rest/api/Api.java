@@ -44,65 +44,65 @@ public class Api {
         // Routing the request based on type
         switch (connection.getRequestType()) {
             case GET:
-                routeGET(connection);
+                routeGET(connection, entry.getUrlPath());
                 break;
             case POST:
-                routePOST(connection);
+                routePOST(connection, entry.getUrlPath());
                 break;
             case PATCH:
-                routePATCH(connection);
+                routePATCH(connection, entry.getUrlPath());
                 break;
             case DELETE:
-                routeDELETE(connection);
+                routeDELETE(connection, entry.getUrlPath());
                 break;
         }
     }
 
-    private void routeGET(Connection connection) {
+    private void routeGET(Connection connection, String destination) {
         if (connection.hasQuery() && !connection.getBodyText().isEmpty()) {
-            submitGET(connection.getUrl(), connection.getQuery().getQueryMap(), connection.getBodyText());
+            submitGET(destination, connection.getQuery().getQueryMap(), connection.getBodyText());
         } else if (connection.hasQuery()) {
-            submitGET(connection.getUrl(), connection.getQuery().getQueryMap());
+            submitGET(destination, connection.getQuery().getQueryMap());
         } else if (!connection.getBodyText().isEmpty()) {
-            submitGET(connection.getUrl(), connection.getBodyText());
+            submitGET(destination, connection.getBodyText());
         } else {
-            submitGET(connection.getUrl());
+            submitGET(destination);
         }
     }
 
-    private void routePOST(Connection connection) {
+    private void routePOST(Connection connection, String destination) {
         if (connection.hasQuery() && !connection.getBodyText().isEmpty()) {
-            submitPOST(connection.getUrl(), connection.getQuery().getQueryMap(), connection.getBodyText());
+            submitPOST(destination, connection.getQuery().getQueryMap(), connection.getBodyText());
         } else if (connection.hasQuery()) {
-            submitPOST(connection.getUrl(), connection.getQuery().getQueryMap());
+            submitPOST(destination, connection.getQuery().getQueryMap());
         } else if (!connection.getBodyText().isEmpty()) {
-            submitPOST(connection.getUrl(), connection.getBodyText());
+            submitPOST(destination, connection.getBodyText());
         } else {
-            submitPOST(connection.getUrl());
+            submitPOST(destination);
         }
     }
 
-    private void routePATCH(Connection connection) {
+    private void routePATCH(Connection connection, String destination) {
         if (connection.hasQuery() && !connection.getBodyText().isEmpty()) {
-            submitPATCH(connection.getUrl(), connection.getQuery().getQueryMap(), connection.getBodyText());
+            submitPATCH(destination, connection.getQuery().getQueryMap(), connection.getBodyText());
         } else if (connection.hasQuery()) {
-            submitPATCH(connection.getUrl(), connection.getQuery().getQueryMap());
+            submitPATCH(destination, connection.getQuery().getQueryMap());
         } else if (!connection.getBodyText().isEmpty()) {
-            submitPATCH(connection.getUrl(), connection.getBodyText());
+            submitPATCH(destination, connection.getBodyText());
         } else {
-            submitPATCH(connection.getUrl());
+            submitPATCH(destination);
         }
     }
 
-    private void routeDELETE(Connection connection) {
+    private void routeDELETE(Connection connection, String destination) {
         if (connection.hasQuery() && !connection.getBodyText().isEmpty()) {
-            submitDELETE(connection.getUrl(), connection.getQuery().getQueryMap(), connection.getBodyText());
+            submitDELETE(destination, connection.getQuery().getQueryMap(), connection.getBodyText());
         } else if (connection.hasQuery()) {
-            submitDELETE(connection.getUrl(), connection.getQuery().getQueryMap());
+            submitDELETE(destination, connection.getQuery().getQueryMap());
         } else if (!connection.getBodyText().isEmpty()) {
-            submitDELETE(connection.getUrl(), connection.getBodyText());
+            submitDELETE(destination, connection.getBodyText());
         } else {
-            submitDELETE(connection.getUrl());
+            submitDELETE(destination);
         }
     }
 
