@@ -63,7 +63,7 @@
         <RadioButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
+            android:checked="false"
             android:text="@string/radio_raw"
             android:id="@+id/results_raw" />
     </RadioGroup>
@@ -81,7 +81,7 @@
             android:layout_width="wrap_content"
             android:text="@string/radio_get"
             android:layout_height="wrap_content"
-            android:checked="true"
+            android:checked="false"
             android:id="@+id/request_get" />
 
         <RadioButton
