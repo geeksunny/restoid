@@ -118,55 +118,18 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     }
 
     private void sendRequest() {
-        // Swap over to the first fragment...
+        // Swap over to the first fragment for results display.
         if (mViewPager.getCurrentItem() != 0) {
             mViewPager.setCurrentItem(0);
         }
+        // If no URL, error toast.
         if (mConnection.getUrl().isEmpty()) {
             Toast.makeText(this, R.string.message_error_nourl, Toast.LENGTH_SHORT).show();
             return;
         }
-        UrlEntry entry = new UrlEntry(mConnection.getUrl());
-        App.getEndpoint().setUrl(entry.getUrlBase());
-        // Send the enabled headers into the Interceptor.
-        RestInterceptor interceptor = RestInterceptor.getInstance();
-        interceptor.removeAllHeaders();
-        for (HeaderEntry header : mConnection.getHeaders()) {
-            interceptor.addHeader(header.getKey(), header.getValue());
-        }
-        // TODO: Move this switching station into a utility class.
+        // Else, send to API router
         Api api = new Api();
-        if (mConnection.hasQuery()) {
-            switch (mConnection.getRequestType()) {
-                case GET:
-                    api.submitGET(entry.getUrlPath(), mConnection.getQuery().getQueryMap());
-                    break;
-                case POST:
-                    api.submitPOST(entry.getUrlPath(), mConnection.getQuery().getQueryMap());
-                    break;
-                case PATCH:
-                    api.submitPATCH(entry.getUrlPath(), mConnection.getQuery().getQueryMap());
-                    break;
-                case DELETE:
-                    api.submitDELETE(entry.getUrlPath(), mConnection.getQuery().getQueryMap());
-                    break;
-            }
-        } else {
-            switch (mConnection.getRequestType()) {
-                case GET:
-                    api.submitGET(entry.getUrlPath());
-                    break;
-                case POST:
-                    api.submitPOST(entry.getUrlPath());
-                    break;
-                case PATCH:
-                    api.submitPATCH(entry.getUrlPath());
-                    break;
-                case DELETE:
-                    api.submitDELETE(entry.getUrlPath());
-                    break;
-            }
-        }
+        api.sendRequest(mConnection);
     }
 
     @Override
