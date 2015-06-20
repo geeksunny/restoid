@@ -40,29 +40,17 @@ public interface RestClient {
     public void deleteEndpoint(@Path("endpoint") final String endpoint, @QueryMap Map<String, String> queryParams, Callback<Object> callback);
 
     /* with body content */
-    @GET("/{endpoint}")
-    public void getEndpoint(@Path("endpoint") final String endpoint, @Body String body, Callback<Object> callback);
-
     @POST("/{endpoint}")
     public void postEndpoint(@Path("endpoint") final String endpoint, @Body String body, Callback<Object> callback);
 
     @PATCH("/{endpoint}")
     public void patchEndpoint(@Path("endpoint") final String endpoint, @Body String body, Callback<Object> callback);
 
-    @DELETE("/{endpoint}")
-    public void deleteEndpoint(@Path("endpoint") final String endpoint, @Body String body, Callback<Object> callback);
-
     /* with query and body content */
-    @GET("/{endpoint}")
-    public void getEndpoint(@Path("endpoint") final String endpoint, @QueryMap Map<String, String> queryParams, @Body String body, Callback<Object> callback);
-
     @POST("/{endpoint}")
     public void postEndpoint(@Path("endpoint") final String endpoint, @QueryMap Map<String, String> queryParams, @Body String body, Callback<Object> callback);
 
     @PATCH("/{endpoint}")
     public void patchEndpoint(@Path("endpoint") final String endpoint, @QueryMap Map<String, String> queryParams, @Body String body, Callback<Object> callback);
-
-    @DELETE("/{endpoint}")
-    public void deleteEndpoint(@Path("endpoint") final String endpoint, @QueryMap Map<String, String> queryParams, @Body String body, Callback<Object> callback);
 
 }

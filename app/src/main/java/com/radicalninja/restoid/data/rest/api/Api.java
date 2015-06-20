@@ -1,5 +1,7 @@
 package com.radicalninja.restoid.data.rest.api;
 
+import android.widget.Toast;
+
 import com.radicalninja.restoid.application.App;
 import com.radicalninja.restoid.data.event.ApiResponseEvent;
 import com.radicalninja.restoid.data.model.Connection;
@@ -60,11 +62,13 @@ public class Api {
 
     private void routeGET(Connection connection, String destination) {
         if (connection.hasQuery() && !connection.getBodyText().isEmpty()) {
-            submitGET(destination, connection.getQuery().getQueryMap(), connection.getBodyText());
+            Toast.makeText(App.getInstance(), "Body contents cannot be sent with GET.", Toast.LENGTH_SHORT).show();
+            submitGET(destination, connection.getQuery().getQueryMap());
         } else if (connection.hasQuery()) {
             submitGET(destination, connection.getQuery().getQueryMap());
         } else if (!connection.getBodyText().isEmpty()) {
-            submitGET(destination, connection.getBodyText());
+            Toast.makeText(App.getInstance(), "Body contents cannot be sent with GET.", Toast.LENGTH_SHORT).show();
+            submitGET(destination);
         } else {
             submitGET(destination);
         }
@@ -96,11 +100,13 @@ public class Api {
 
     private void routeDELETE(Connection connection, String destination) {
         if (connection.hasQuery() && !connection.getBodyText().isEmpty()) {
-            submitDELETE(destination, connection.getQuery().getQueryMap(), connection.getBodyText());
+            Toast.makeText(App.getInstance(), "Body contents cannot be sent with DELETE.", Toast.LENGTH_SHORT).show();
+            submitDELETE(destination, connection.getQuery().getQueryMap());
         } else if (connection.hasQuery()) {
             submitDELETE(destination, connection.getQuery().getQueryMap());
         } else if (!connection.getBodyText().isEmpty()) {
-            submitDELETE(destination, connection.getBodyText());
+            Toast.makeText(App.getInstance(), "Body contents cannot be sent with DELETE.", Toast.LENGTH_SHORT).show();
+            submitDELETE(destination);
         } else {
             submitDELETE(destination);
         }
@@ -112,14 +118,6 @@ public class Api {
 
     public void submitGET(String url, Map<String, String> query) {
         client.getEndpoint(url, query, mCallback);
-    }
-
-    public void submitGET(String url, String body) {
-        client.getEndpoint(url, body, mCallback);
-    }
-
-    public void submitGET(String url, Map<String, String> query, String body) {
-        client.getEndpoint(url, query, body, mCallback);
     }
 
     public void submitPOST(String url) {
@@ -160,14 +158,6 @@ public class Api {
 
     public void submitDELETE(String url, Map<String, String> query) {
         client.deleteEndpoint(url, query, mCallback);
-    }
-
-    public void submitDELETE(String url, String body) {
-        client.deleteEndpoint(url, body, mCallback);
-    }
-
-    public void submitDELETE(String url, Map<String, String> query, String body) {
-        client.deleteEndpoint(url, query, body, mCallback);
     }
 
 }

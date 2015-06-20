@@ -7,12 +7,21 @@ import com.squareup.otto.Bus;
 
 public class App extends Application {
 
+    private static App sInstance;
     private static Bus sOttoBus = new Bus();
     private static DynamicEndpoint sEndpoint = new DynamicEndpoint("http://www.google.com/");
+
+    public App() {
+        sInstance = this;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
+    }
+
+    public static App getInstance() {
+        return sInstance;
     }
 
     public static Bus getOttoBus() {
