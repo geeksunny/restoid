@@ -45,4 +45,8 @@ public class UrlEntry {
     public void setUrlPath(String urlPath) {
         this.urlPath = urlPath;
     }
+
+    public boolean isEmpty() {
+        return (urlBase == null || urlBase.isEmpty()) && (urlPath == null || urlPath.isEmpty());
+    }
 }

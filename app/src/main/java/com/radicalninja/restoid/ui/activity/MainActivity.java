@@ -110,37 +110,45 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             case R.id.action_settings:
                 return true;
             case R.id.action_send:
-                // Swap over to the first fragment...
-                if (mViewPager.getCurrentItem() != 0) {
-                    mViewPager.setCurrentItem(0);
-                }
-                UrlEntry entry = new UrlEntry(mConnection.getUrl());
-                App.getEndpoint().setUrl(entry.getUrlBase());
-                // Send the enabled headers into the Interceptor.
-                RestInterceptor interceptor = RestInterceptor.getInstance();
-                interceptor.removeAllHeaders();
-                for (HeaderEntry header : mConnection.getHeaders()) {
-                    interceptor.addHeader(header.getKey(), header.getValue());
-                }
-                Api api = new Api();
-                switch (mConnection.getRequestType()) {
-                    case GET:
-                        api.submitGET(entry.getUrlPath());
-                        break;
-                    case POST:
-                        api.submitPOST(entry.getUrlPath());
-                        break;
-                    case PATCH:
-                        api.submitPATCH(entry.getUrlPath());
-                        break;
-                    case DELETE:
-                        api.submitDELETE(entry.getUrlPath());
-                        break;
-                }
+                sendRequest();
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void sendRequest() {
+        // Swap over to the first fragment...
+        if (mViewPager.getCurrentItem() != 0) {
+            mViewPager.setCurrentItem(0);
+        }
+        if (mConnection.getUrl().isEmpty()) {
+            Toast.makeText(this, R.string.message_error_nourl, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        UrlEntry entry = new UrlEntry(mConnection.getUrl());
+        App.getEndpoint().setUrl(entry.getUrlBase());
+        // Send the enabled headers into the Interceptor.
+        RestInterceptor interceptor = RestInterceptor.getInstance();
+        interceptor.removeAllHeaders();
+        for (HeaderEntry header : mConnection.getHeaders()) {
+            interceptor.addHeader(header.getKey(), header.getValue());
+        }
+        Api api = new Api();
+        switch (mConnection.getRequestType()) {
+            case GET:
+                api.submitGET(entry.getUrlPath());
+                break;
+            case POST:
+                api.submitPOST(entry.getUrlPath());
+                break;
+            case PATCH:
+                api.submitPATCH(entry.getUrlPath());
+                break;
+            case DELETE:
+                api.submitDELETE(entry.getUrlPath());
+                break;
+        }
     }
 
     @Override
@@ -185,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
         @Override
         public int getCount() {
-            // Show 4 total pages.
             return 5;
         }
 

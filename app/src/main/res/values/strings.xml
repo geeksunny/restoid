@@ -25,6 +25,8 @@
     <string name="radio_formatted">Formatted</string>
     <string name="radio_json">JSON</string>
 
+    <string name="message_error_nourl">Please specify a URL for your request.</string>
+
     <string name="action_add">Add</string>
     <string name="action_send">Send</string>
     <string name="action_settings">Settings</string>

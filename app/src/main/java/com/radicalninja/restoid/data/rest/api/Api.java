@@ -4,6 +4,7 @@ import com.radicalninja.restoid.application.App;
 import com.radicalninja.restoid.data.event.ApiResponseEvent;
 import com.radicalninja.restoid.data.rest.adapter.RestAdapter;
 import com.radicalninja.restoid.data.rest.client.RestClient;
+import com.radicalninja.restoid.util.ResponseUtils;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -17,7 +18,7 @@ public class Api {
         client.getEndpoint(url, new Callback<Object>() {
             @Override
             public void success(Object o, Response response) {
-                App.getOttoBus().post(new ApiResponseEvent(response.getBody().toString()));
+                App.getOttoBus().post(new ApiResponseEvent(ResponseUtils.getResponseText(response)));
             }
 
             @Override
@@ -31,7 +32,7 @@ public class Api {
         client.postEndpoint(url, new Callback<Object>() {
             @Override
             public void success(Object o, Response response) {
-                App.getOttoBus().post(new ApiResponseEvent(response.getBody().toString()));
+                App.getOttoBus().post(new ApiResponseEvent(ResponseUtils.getResponseText(response)));
             }
 
             @Override
@@ -45,7 +46,7 @@ public class Api {
         client.patchEndpoint(url, new Callback<Object>() {
             @Override
             public void success(Object o, Response response) {
-                App.getOttoBus().post(new ApiResponseEvent(response.getBody().toString()));
+                App.getOttoBus().post(new ApiResponseEvent(ResponseUtils.getResponseText(response)));
             }
 
             @Override
@@ -59,7 +60,7 @@ public class Api {
         client.deleteEndpoint(url, new Callback<Object>() {
             @Override
             public void success(Object o, Response response) {
-                App.getOttoBus().post(new ApiResponseEvent(response.getBody().toString()));
+                App.getOttoBus().post(new ApiResponseEvent(ResponseUtils.getResponseText(response)));
             }
 
             @Override
