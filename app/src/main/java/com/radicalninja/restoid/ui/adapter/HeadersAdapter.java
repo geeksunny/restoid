@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -23,6 +24,7 @@ public class HeadersAdapter extends RecyclerView.Adapter<HeadersAdapter.ViewHold
         public CheckBox enabled;
         public EditText key;
         public EditText value;
+        public Button deleteButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -62,11 +64,12 @@ public class HeadersAdapter extends RecyclerView.Adapter<HeadersAdapter.ViewHold
         h.enabled = (CheckBox) view.findViewById(R.id.checkbox_is_enabled);
         h.key = (EditText) view.findViewById(R.id.edittext_key);
         h.value = (EditText) view.findViewById(R.id.edittext_value);
+        h.deleteButton = (Button) view.findViewById(R.id.button_delete);
         return h;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder vh, int pos) {
+    public void onBindViewHolder(ViewHolder vh, final int pos) {
         final int i = pos;
         final HeaderEntry entry = getItem(i);
         vh.enabled.setChecked(entry.isEnabled());
@@ -104,6 +107,12 @@ public class HeadersAdapter extends RecyclerView.Adapter<HeadersAdapter.ViewHold
             @Override
             public void afterTextChanged(Editable s) {
                 getItem(i).setValue(s.toString());
+            }
+        });
+        vh.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                remove(pos);
             }
         });
     }

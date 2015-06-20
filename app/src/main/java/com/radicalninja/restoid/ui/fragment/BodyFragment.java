@@ -1,7 +1,6 @@
 package com.radicalninja.restoid.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -10,13 +9,13 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.radicalninja.restoid.R;
+import com.radicalninja.restoid.data.model.Connection;
 
-public class BodyFragment extends Fragment {
+public class BodyFragment extends BaseConnectionFragment {
 
     private static final String BUNDLE_KEY_BODY_INPUT = "BodyInput";
 
     private EditText mBodyInput;
-    private String mBodyString;
 
     public static BodyFragment newInstance() {
         // TODO: In the future, saved connections will be used here for building new fragments.
@@ -30,14 +29,15 @@ public class BodyFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_body, container, false);
         mBodyInput = (EditText) rootView.findViewById(R.id.text_body_input);
-        mBodyInput.setText(mBodyString);
         mBodyInput.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
             @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                mBodyString = editable.toString();
+                if (getConnection() != null) {
+                    getConnection().setBodyText(editable.toString());
+                }
             }
         });
         return rootView;
@@ -57,7 +57,8 @@ public class BodyFragment extends Fragment {
         outState.putString(BUNDLE_KEY_BODY_INPUT, mBodyInput.getText().toString());
     }
 
-    public void setBodyString(String bodyString) {
-        mBodyString = bodyString;
+    @Override
+    protected void populateConnectionInfo(Connection connection) {
+        mBodyInput.setText(connection.getBodyText());
     }
 }

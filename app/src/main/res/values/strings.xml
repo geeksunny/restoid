@@ -3,8 +3,9 @@
 
     <string name="title_section1">Request</string>
     <string name="title_section2">Headers</string>
-    <string name="title_section3">Body</string>
-    <string name="title_section4">&#8230;</string><!-- elipses -->
+    <string name="title_section3">Params</string>
+    <string name="title_section4">Body</string>
+    <string name="title_section5">&#8230;</string><!-- elipses -->
 
     <string name="label_url">URL</string>
     <string name="label_results">Results</string>
@@ -13,6 +14,7 @@
     <string name="hint_header_key">Header Key</string>
     <string name="hint_header_value">Header Value</string>
     <string name="hint_body_input">Enter any body data here.</string>
+    <string name="button_header_delete">DELETE</string>
     <string name="radio_get">GET</string>
     <string name="radio_post">POST</string>
     <string name="radio_patch">PATCH</string>

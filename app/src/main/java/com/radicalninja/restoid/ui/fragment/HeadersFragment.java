@@ -10,23 +10,20 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.radicalninja.restoid.R;
+import com.radicalninja.restoid.data.model.Connection;
 import com.radicalninja.restoid.data.model.HeaderEntry;
-import com.radicalninja.restoid.data.model.HeaderList;
 import com.radicalninja.restoid.ui.adapter.HeadersAdapter;
 import com.radicalninja.restoid.util.Ln;
 
-public class HeadersFragment extends Fragment {
-
-    private static final String BUNDLE_HEADERS = "Headers";
+public class HeadersFragment extends BaseConnectionFragment {
 
     // Layout
     private RecyclerView mRecyclerView;
     private HeadersAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    // Data
-    private HeaderList mHeaders = new HeaderList();   // TODO: Should we have a local copy stored?
 
     public static HeadersFragment newInstance() {
         // TODO: In the future, saved connections will be used here for building new fragments.
@@ -50,7 +47,7 @@ public class HeadersFragment extends Fragment {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_headers);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new HeadersAdapter(getActivity(), mHeaders);
+        mAdapter = new HeadersAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;
@@ -65,14 +62,17 @@ public class HeadersFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_new_header) {
-            mAdapter.add(new HeaderEntry());
+            if (mAdapter != null) {
+                mAdapter.add(new HeaderEntry());
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void setHeaders(HeaderList headerList) {
-        mHeaders = headerList;
+    @Override
+    protected void populateConnectionInfo(Connection connection) {
+        Ln.i("Populating Connection Info on HeadersFragment");
+        mAdapter.setHeaders(connection.getHeaders());
     }
-
 }

@@ -12,9 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.application.App;
+import com.radicalninja.restoid.data.event.ConnectionDataEvent;
+import com.radicalninja.restoid.data.model.Connection;
 import com.radicalninja.restoid.data.model.HeaderEntry;
 import com.radicalninja.restoid.data.model.HeaderList;
 import com.radicalninja.restoid.data.model.UrlEntry;
@@ -25,16 +28,13 @@ import com.radicalninja.restoid.ui.fragment.HeadersFragment;
 import com.radicalninja.restoid.ui.fragment.OtherSettingsFragment;
 import com.radicalninja.restoid.ui.fragment.RequestFragment;
 import com.radicalninja.restoid.util.Ln;
+import com.squareup.otto.Subscribe;
 
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
-    private HeaderList mHeaders = new HeaderList();
-    private String mUrl;
-    private RequestFragment.RequestType mRequestType;
-    private RequestFragment.ResultType mResultType;
-    private String mBody;
+    private Connection mConnection = new Connection();
 
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
@@ -79,6 +79,17 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        App.getOttoBus().register(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        App.getOttoBus().unregister(this);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -102,18 +113,16 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                 if (mViewPager.getCurrentItem() != 0) {
                     mViewPager.setCurrentItem(0);
                 }
-                // ... And grab a reference of that fragment for posting!
-                RequestFragment fragment = (RequestFragment) mSectionsPagerAdapter.instantiateItem(mViewPager, 0);
-                UrlEntry entry = fragment.getUrlEntry();
+                UrlEntry entry = new UrlEntry(mConnection.getUrl());
                 App.getEndpoint().setUrl(entry.getUrlBase());
                 // Send the enabled headers into the Interceptor.
                 RestInterceptor interceptor = RestInterceptor.getInstance();
                 interceptor.removeAllHeaders();
-                for (HeaderEntry header : mHeaders) {
+                for (HeaderEntry header : mConnection.getHeaders()) {
                     interceptor.addHeader(header.getKey(), header.getValue());
                 }
                 Api api = new Api();
-                switch (fragment.getRequestType()) {
+                switch (mConnection.getRequestType()) {
                     case GET:
                         api.submitGET(entry.getUrlPath());
                         break;
@@ -141,12 +150,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     }
 
     @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
 
     @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -162,15 +169,11 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         public Fragment getItem(int position) {
             switch (position) {
                 case 1:
-                    Ln.e("Instaniating Headers Fragment");
-                    HeadersFragment headersFragment = HeadersFragment.newInstance();
-                    headersFragment.setHeaders(mHeaders);
-                    return headersFragment;
+                    return HeadersFragment.newInstance();
                 case 2:
-                    BodyFragment bodyFragment = BodyFragment.newInstance();
-                    bodyFragment.setBodyString(mBody);
-                    return bodyFragment;
                 case 3:
+                    return BodyFragment.newInstance();
+                case 4:
                     return OtherSettingsFragment.newInstance();
                 case 0:
                 default:
@@ -181,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         @Override
         public int getCount() {
             // Show 4 total pages.
-            return 4;
+            return 5;
         }
 
         @Override
@@ -196,9 +199,17 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
                     return getString(R.string.title_section3).toUpperCase(l);
                 case 3:
                     return getString(R.string.title_section4).toUpperCase(l);
+                case 4:
+                    return getString(R.string.title_section5).toUpperCase(l);
             }
             return null;
         }
+    }
+
+    @Subscribe
+    public void connectionDataRequestReceived(ConnectionDataEvent.ReadRequest request) {
+        Ln.i("ReadRequest received.");
+        App.getOttoBus().post(new ConnectionDataEvent.ReadResponse(mConnection));
     }
 
 }
