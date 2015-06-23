@@ -5,6 +5,11 @@ import android.util.Pair;
 import com.radicalninja.restoid.application.App;
 import com.radicalninja.restoid.data.rest.client.RestClient;
 import com.radicalninja.restoid.data.rest.interceptor.RestInterceptor;
+import com.radicalninja.restoid.util.Ln;
+import com.radicalninja.restoid.util.ResponseUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -65,7 +70,16 @@ public class RestAdapter {
     public class StringConverter implements Converter {
         @Override public Object fromBody(TypedInput body, Type type) throws ConversionException {
             try {
-                return ByteString.read(body.in(), (int) body.length()).utf8();
+                String string = ByteString.read(body.in(), (int) body.length()).utf8();
+                try {
+                    // If the string can get parsed as a JSON object, we can return it with indentation.
+                    JSONObject json = new JSONObject(string);
+                    String str = json.toString(4);
+                    Ln.e(str);
+                    return str;
+                } catch (JSONException e) {
+                    return string;
+                }
             } catch (IOException e) {
                 throw new ConversionException("Problem when convert string", e);
             }

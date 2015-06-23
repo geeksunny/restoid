@@ -27,4 +27,17 @@ public class ResponseUtils {
         return sb.toString();
     }
 
+    public static String encodeIndentedJson(String json, int indentSize) {
+        char space = 0x00A0;
+        StringBuffer search = new StringBuffer(indentSize);
+        StringBuffer replace = new StringBuffer(indentSize);
+        for (int i = 0; i < indentSize; i++) {
+            search.append(" ");
+            replace.append(space);
+        }
+        String str = json.replace(search, replace);
+        return str.replace("\n", "\r\n");
+        //return str;
+    }
+
 }
