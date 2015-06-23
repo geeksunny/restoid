@@ -30,7 +30,8 @@ public class Api {
 
         @Override
         public void failure(RetrofitError error) {
-            App.getOttoBus().post(new ApiResponseEvent(error.toString()));
+            // TODO: will we need to post something else if there is a null response for some reason?
+            App.getOttoBus().post(new ApiResponseEvent(ResponseUtils.getResponseText(error.getResponse())));
         }
     };
 
