@@ -24,7 +24,6 @@ public abstract class BaseConnectionFragment extends Fragment {
         }
         @Subscribe
         public void connectionResponseReceived(ConnectionDataEvent.ReadResponse response) {
-            Ln.i("ReadResponse received.");
             mConnection = response.connection;
             populateConnectionInfo(mConnection);
         }
@@ -37,8 +36,6 @@ public abstract class BaseConnectionFragment extends Fragment {
         if (mConnection == null) {
             //Toast.makeText(getActivity(), "mConnection is null", Toast.LENGTH_LONG).show();
             App.getOttoBus().post(new ConnectionDataEvent.ReadRequest());
-        } else {
-            Toast.makeText(getActivity(), "mConnection is not null...", Toast.LENGTH_LONG).show();
         }
     }
 
