@@ -42,7 +42,7 @@ public class Connection {
         return mUrl;
     }
 
-    public void setmUrl(String url) {
+    public void setUrl(String url) {
         this.mUrl = url;
     }
 
@@ -74,7 +74,7 @@ public class Connection {
         return mQuery;
     }
 
-    public void getQuery(QueryList params) {
+    public void setQuery(QueryList params) {
         this.mQuery = params;
     }
 

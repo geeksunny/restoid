@@ -70,7 +70,7 @@ public class ParamsFragment extends BaseConnectionFragment {
 
     @Override
     protected void populateConnectionInfo(Connection connection) {
-        Ln.i("Populating Connection Info on HeadersFragment");
+        Ln.i("Populating Connection Info on ParamsFragment");
         mAdapter.setHeaders(connection.getQuery());
     }
 }

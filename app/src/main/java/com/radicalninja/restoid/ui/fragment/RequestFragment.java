@@ -3,22 +3,17 @@ package com.radicalninja.restoid.ui.fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.application.App;
 import com.radicalninja.restoid.data.event.ApiResponseEvent;
-import com.radicalninja.restoid.data.event.ConnectionDataEvent;
 import com.radicalninja.restoid.data.model.Connection;
-import com.radicalninja.restoid.data.model.UrlEntry;
-import com.radicalninja.restoid.util.Ln;
 import com.squareup.otto.Subscribe;
 
 public class RequestFragment extends BaseConnectionFragment {
@@ -85,7 +80,7 @@ public class RequestFragment extends BaseConnectionFragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                connection.setmUrl(s.toString());
+                connection.setUrl(s.toString());
             }
         });
         // Checking the appropriate radio buttons...
