@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
     private Connection mConnection = new Connection();
 
+    DrawerLayout mDrawerLayout;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
 
