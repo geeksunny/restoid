@@ -1,6 +1,8 @@
 package com.radicalninja.restoid.data.model;
 
-public class QueryEntry {
+import java.io.Serializable;
+
+public class QueryEntry implements Serializable {
 
     private String mKey;
     private String mValue;

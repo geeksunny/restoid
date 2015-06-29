@@ -1,6 +1,8 @@
 package com.radicalninja.restoid.data.model;
 
-public class HeaderEntry {
+import java.io.Serializable;
+
+public class HeaderEntry implements Serializable {
 
     private boolean mIsEnabled = false;
     private String mKey;
