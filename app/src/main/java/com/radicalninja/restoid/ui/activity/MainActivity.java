@@ -1,5 +1,6 @@
 package com.radicalninja.restoid.ui.activity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,21 +10,24 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.application.App;
+import com.radicalninja.restoid.data.db.ConnectionManager;
 import com.radicalninja.restoid.data.event.ConnectionDataEvent;
 import com.radicalninja.restoid.data.model.Connection;
-import com.radicalninja.restoid.data.model.HeaderEntry;
-import com.radicalninja.restoid.data.model.HeaderList;
-import com.radicalninja.restoid.data.model.UrlEntry;
+import com.radicalninja.restoid.data.model.QueryEntry;
+import com.radicalninja.restoid.data.model.QueryList;
 import com.radicalninja.restoid.data.rest.api.Api;
-import com.radicalninja.restoid.data.rest.interceptor.RestInterceptor;
+import com.radicalninja.restoid.ui.adapter.ConnectionsAdapter;
 import com.radicalninja.restoid.ui.fragment.BodyFragment;
 import com.radicalninja.restoid.ui.fragment.HeadersFragment;
 import com.radicalninja.restoid.ui.fragment.OtherSettingsFragment;
@@ -32,13 +36,28 @@ import com.radicalninja.restoid.ui.fragment.RequestFragment;
 import com.radicalninja.restoid.util.Ln;
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
 
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+            mDrawerListView.setItemChecked(position, true);
+        }
+    }
+
     private Connection mConnection = new Connection();
 
+    final ConnectionManager mConnectionManager = new ConnectionManager(this);
+    ConnectionsAdapter mConnectionsAdapter;
     DrawerLayout mDrawerLayout;
+    ActionBarDrawerToggle mDrawerToggle;
+    // TODO: Move nav drawer into its own fragment with Otto events for changing connections.
+    ListView mDrawerListView;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
 
@@ -47,9 +66,37 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Grab connections
+//        List<Connection> connections = mConnectionManager.getAllConnections();
+        List<Connection> connections = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Connection con = new Connection();
+            con.setName("Connection "+i);
+            con.setUrl("http://www.google.com/");
+            QueryList query = new QueryList();
+            QueryEntry entry = new QueryEntry();
+            entry.setKey("q");
+            entry.setValue("Con "+i);
+            query.add(entry);
+            con.setQuery(query);
+            connections.add(con);
+        }
+
+        // Set up the nav drawer
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, 0, 0);
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerListView = (ListView) findViewById(R.id.left_drawer);
+        mConnectionsAdapter = new ConnectionsAdapter(this, connections);
+        mDrawerListView.setAdapter(mConnectionsAdapter);
+        mDrawerListView.setOnItemClickListener(new DrawerItemClickListener());
+
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -95,6 +142,12 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        mDrawerToggle.syncState();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -102,7 +155,16 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
@@ -117,6 +179,11 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void selectItem(int position) {
+        mConnection = mConnectionsAdapter.getItem(position);
+        connectionDataRequestReceived(null);
     }
 
     private void sendRequest() {
