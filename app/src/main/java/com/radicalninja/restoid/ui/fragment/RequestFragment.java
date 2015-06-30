@@ -51,6 +51,63 @@ public class RequestFragment extends BaseConnectionFragment {
         mResultsTypes = (RadioGroup) rootView.findViewById(R.id.results_types);
         mResults = (TextView) rootView.findViewById(R.id.text_results);
 
+        mUrl.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (getConnection() != null) {
+                    getConnection().setUrl(s.toString());
+                    onConnectionChanged();
+                }
+            }
+        });
+
+        mRequestTypes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (getConnection() == null) {
+                    return;
+                }
+                onConnectionChanged();
+                switch (checkedId) {
+                    case R.id.request_post:
+                        getConnection().setRequestType(RequestType.POST);
+                        break;
+                    case R.id.request_patch:
+                        getConnection().setRequestType(RequestType.PATCH);
+                        break;
+                    case R.id.request_delete:
+                        getConnection().setRequestType(RequestType.DELETE);
+                        break;
+                    case R.id.request_get:
+                    default:
+                        getConnection().setRequestType(RequestType.GET);
+                }
+            }
+        });
+        mResultsTypes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (getConnection() == null) {
+                    return;
+                }
+                onConnectionChanged();
+                switch (checkedId) {
+                    case R.id.results_formatted:
+                        getConnection().setResultType(ResultType.FORMATTED);
+                        break;
+                    case R.id.results_json:
+                        getConnection().setResultType(ResultType.JSON);
+                        break;
+                    case R.id.results_raw:
+                    default:
+                        getConnection().setResultType(ResultType.RAW);
+                }
+            }
+        });
+
         return rootView;
     }
 
@@ -74,21 +131,7 @@ public class RequestFragment extends BaseConnectionFragment {
     @Override
     protected void populateConnectionInfo(final Connection connection) {
         // Set the URL, and then setup the textwatcher
-        if (mTextWatcher != null) {
-            mUrl.removeTextChangedListener(mTextWatcher);
-        }
         mUrl.setText(connection.getUrl());
-        mTextWatcher = new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                connection.setUrl(s.toString());
-                onConnectionChanged();
-            }
-        };
-        mUrl.addTextChangedListener(mTextWatcher);
         // Checking the appropriate radio buttons...
         int id = 0;
         switch (connection.getRequestType()) {
@@ -118,44 +161,6 @@ public class RequestFragment extends BaseConnectionFragment {
                 id = R.id.results_raw;
         }
         mResultsTypes.check(id);
-        // ... And then setting up their onCheckChangedListeners.
-        mRequestTypes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                onConnectionChanged();
-                switch (checkedId) {
-                    case R.id.request_post:
-                        connection.setRequestType(RequestType.POST);
-                        break;
-                    case R.id.request_patch:
-                        connection.setRequestType(RequestType.PATCH);
-                        break;
-                    case R.id.request_delete:
-                        connection.setRequestType(RequestType.DELETE);
-                        break;
-                    case R.id.request_get:
-                    default:
-                        connection.setRequestType(RequestType.GET);
-                }
-            }
-        });
-        mResultsTypes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                onConnectionChanged();
-                switch (checkedId) {
-                    case R.id.results_formatted:
-                        connection.setResultType(ResultType.FORMATTED);
-                        break;
-                    case R.id.results_json:
-                        connection.setResultType(ResultType.JSON);
-                        break;
-                    case R.id.results_raw:
-                    default:
-                        connection.setResultType(ResultType.RAW);
-                }
-            }
-        });
 
     }
 
