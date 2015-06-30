@@ -37,6 +37,7 @@ public class BodyFragment extends BaseConnectionFragment {
             public void afterTextChanged(Editable editable) {
                 if (getConnection() != null) {
                     getConnection().setBodyText(editable.toString());
+                    onConnectionChanged();
                 }
             }
         });

@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.radicalninja.restoid.application.App;
 import com.radicalninja.restoid.data.event.ConnectionDataEvent;
 import com.radicalninja.restoid.data.model.Connection;
+import com.radicalninja.restoid.ui.listener.ConnectionChangedListener;
 import com.radicalninja.restoid.util.Ln;
 import com.squareup.otto.Subscribe;
 
@@ -14,6 +15,7 @@ public abstract class BaseConnectionFragment extends Fragment {
 
     private OttoDelegate mDelegate = new OttoDelegate();
     private Connection mConnection;
+    private ConnectionChangedListener mConnectionChangedListener = new ConnectionChangedListener();
 
     private class OttoDelegate {
         public void register() {
@@ -51,4 +53,7 @@ public abstract class BaseConnectionFragment extends Fragment {
 
     protected abstract void populateConnectionInfo(Connection connection);
 
+    protected void onConnectionChanged() {
+        mConnectionChangedListener.didChange(mConnection);
+    }
 }

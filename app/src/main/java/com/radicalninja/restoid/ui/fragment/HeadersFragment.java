@@ -64,6 +64,7 @@ public class HeadersFragment extends BaseConnectionFragment {
         if (item.getItemId() == R.id.action_new_header) {
             if (mAdapter != null) {
                 mAdapter.add(new HeaderEntry());
+                onConnectionChanged();
             }
             return true;
         }

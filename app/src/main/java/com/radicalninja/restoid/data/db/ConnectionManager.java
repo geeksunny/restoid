@@ -26,4 +26,12 @@ public class ConnectionManager extends DatabaseManager<Connection, Integer> {
         return getObject(id);
     }
 
+    public boolean saveConnection(Connection connection) {
+        return saveObject(connection);
+    }
+
+    public boolean deleteConnection(Connection connection) {
+        return deleteObject(connection);
+    }
+
 }

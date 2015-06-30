@@ -14,4 +14,5 @@ public class ConnectionDataEvent {
         }
     }
 
+    public static class ChangedAlert { }
 }

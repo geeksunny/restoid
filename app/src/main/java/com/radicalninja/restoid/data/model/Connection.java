@@ -1,5 +1,6 @@
 package com.radicalninja.restoid.data.model;
 
+import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.radicalninja.restoid.ui.fragment.RequestFragment;
@@ -8,6 +9,9 @@ import com.radicalninja.restoid.ui.fragment.RequestFragment;
 public class Connection {
 
     public static final String TABLE_NAME = "Connections";
+
+    @DatabaseField(generatedId = true)
+    Integer _id;
 
     @DatabaseField(columnName = "name")
     String mName = "";
@@ -21,14 +25,16 @@ public class Connection {
     @DatabaseField(columnName = "results_type")
     RequestFragment.ResultType mResultType = RequestFragment.ResultType.RAW;
 
-    @DatabaseField(columnName = "headers")
+    @DatabaseField(columnName = "headers", dataType = DataType.SERIALIZABLE)
     HeaderList mHeaders = new HeaderList();
 
-    @DatabaseField(columnName = "query")
+    @DatabaseField(columnName = "query", dataType = DataType.SERIALIZABLE)
     QueryList mQuery = new QueryList();
 
     @DatabaseField(columnName = "body")
     String bodyText = "";
+
+    boolean isChanged = false;
 
     public String getName() {
         return mName;
@@ -88,5 +94,13 @@ public class Connection {
 
     public void setBodyText(String bodyText) {
         this.bodyText = bodyText;
+    }
+
+    public boolean isChanged() {
+        return isChanged;
+    }
+
+    public void setIsChanged(boolean isChanged) {
+        this.isChanged = isChanged;
     }
 }

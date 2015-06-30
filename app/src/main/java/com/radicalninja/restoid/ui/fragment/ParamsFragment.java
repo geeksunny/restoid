@@ -62,6 +62,7 @@ public class ParamsFragment extends BaseConnectionFragment {
         if (item.getItemId() == R.id.action_new_header) {
             if (mAdapter != null) {
                 mAdapter.add(new QueryEntry());
+                onConnectionChanged();
             }
             return true;
         }

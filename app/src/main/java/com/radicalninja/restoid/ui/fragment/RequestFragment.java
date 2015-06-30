@@ -29,6 +29,7 @@ public class RequestFragment extends BaseConnectionFragment {
     private EditText mUrl;
     private RadioGroup mRequestTypes, mResultsTypes;
     private TextView mResults;
+    private TextWatcher mTextWatcher;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -73,16 +74,21 @@ public class RequestFragment extends BaseConnectionFragment {
     @Override
     protected void populateConnectionInfo(final Connection connection) {
         // Set the URL, and then setup the textwatcher
+        if (mTextWatcher != null) {
+            mUrl.removeTextChangedListener(mTextWatcher);
+        }
         mUrl.setText(connection.getUrl());
-        mUrl.addTextChangedListener(new TextWatcher() {
+        mTextWatcher = new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
 
             @Override
             public void afterTextChanged(Editable s) {
                 connection.setUrl(s.toString());
+                onConnectionChanged();
             }
-        });
+        };
+        mUrl.addTextChangedListener(mTextWatcher);
         // Checking the appropriate radio buttons...
         int id = 0;
         switch (connection.getRequestType()) {
@@ -116,6 +122,7 @@ public class RequestFragment extends BaseConnectionFragment {
         mRequestTypes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                onConnectionChanged();
                 switch (checkedId) {
                     case R.id.request_post:
                         connection.setRequestType(RequestType.POST);
@@ -135,6 +142,7 @@ public class RequestFragment extends BaseConnectionFragment {
         mResultsTypes.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
+                onConnectionChanged();
                 switch (checkedId) {
                     case R.id.results_formatted:
                         connection.setResultType(ResultType.FORMATTED);

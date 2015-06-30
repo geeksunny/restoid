@@ -67,20 +67,19 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         setContentView(R.layout.activity_main);
 
         // Grab connections
-//        List<Connection> connections = mConnectionManager.getAllConnections();
-        List<Connection> connections = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            Connection con = new Connection();
-            con.setName("Connection "+i);
-            con.setUrl("http://www.google.com/");
-            QueryList query = new QueryList();
-            QueryEntry entry = new QueryEntry();
-            entry.setKey("q");
-            entry.setValue("Con "+i);
-            query.add(entry);
-            con.setQuery(query);
-            connections.add(con);
-        }
+        List<Connection> connections = mConnectionManager.getAllConnections();
+//        for (int i = 0; i < 5; i++) {
+//            Connection con = new Connection();
+//            con.setName("Connection "+i);
+//            con.setUrl("http://www.google.com/");
+//            QueryList query = new QueryList();
+//            QueryEntry entry = new QueryEntry();
+//            entry.setKey("q");
+//            entry.setValue("Con "+i);
+//            query.add(entry);
+//            con.setQuery(query);
+//            connections.add(con);
+//        }
 
         // Set up the nav drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -151,6 +150,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem item = menu.findItem(R.id.action_save);
+        if (item == null || !mConnection.isChanged()) {
+            item.setEnabled(false);
+        }
         return true;
     }
 
@@ -176,9 +179,18 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             case R.id.action_send:
                 sendRequest();
                 return true;
+            case R.id.action_save:
+                saveRequest();
+                invalidateOptionsMenu();
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveRequest() {
+        mConnection.setIsChanged(false);
+        mConnectionManager.saveConnection(mConnection);
     }
 
     private void selectItem(int position) {
@@ -269,6 +281,11 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     public void connectionDataRequestReceived(ConnectionDataEvent.ReadRequest request) {
         Ln.i("ReadRequest received.");
         App.getOttoBus().post(new ConnectionDataEvent.ReadResponse(mConnection));
+    }
+
+    @Subscribe
+    public void connectionChangedEventReceived(ConnectionDataEvent.ChangedAlert alert) {
+        invalidateOptionsMenu();
     }
 
 }
