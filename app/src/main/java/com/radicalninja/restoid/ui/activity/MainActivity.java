@@ -2,6 +2,7 @@ package com.radicalninja.restoid.ui.activity;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,8 +27,6 @@ import com.radicalninja.restoid.data.db.ConnectionManager;
 import com.radicalninja.restoid.data.db.SqlResult;
 import com.radicalninja.restoid.data.event.ConnectionDataEvent;
 import com.radicalninja.restoid.data.model.Connection;
-import com.radicalninja.restoid.data.model.QueryEntry;
-import com.radicalninja.restoid.data.model.QueryList;
 import com.radicalninja.restoid.data.rest.api.Api;
 import com.radicalninja.restoid.ui.adapter.ConnectionsAdapter;
 import com.radicalninja.restoid.ui.fragment.BodyFragment;
@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements ActionBar.TabListener {
+public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         @Override
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     // TODO: Move nav drawer into its own fragment with Otto events for changing connections.
     ListView mDrawerListView;
     SectionsPagerAdapter mSectionsPagerAdapter;
+    TabLayout mTabLayout;
     ViewPager mViewPager;
 
     @Override
@@ -92,11 +93,18 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         mDrawerListView.setAdapter(mConnectionsAdapter);
         mDrawerListView.setOnItemClickListener(new DrawerItemClickListener());
 
+        // Set up the Toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         // Set up the action bar.
         final ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
+
+        // TabLayout
+        mTabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -109,12 +117,13 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
         // When swiping between different sections, select the corresponding
         // tab. We can also use ActionBar.Tab#select() to do this if we have
         // a reference to the Tab.
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                actionBar.setSelectedNavigationItem(position);
-            }
-        });
+//        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+//            @Override
+//            public void onPageSelected(int position) {
+//                //actionBar.setSelectedNavigationItem(position);
+//                //mTabLayout.setSelectedNa
+//            }
+//        });
 
         // For each of the sections in the app, add a tab to the action bar.
         for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
@@ -122,11 +131,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
             // the adapter. Also specify this Activity object, which implements
             // the TabListener interceptor, as the callback (listener) for when
             // this tab is selected.
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText(mSectionsPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
+            mTabLayout.addTab(
+                    mTabLayout.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)));
         }
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override
@@ -219,17 +227,17 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
     }
 
     @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    public void onTabReselected(TabLayout.Tab tab) { }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
         // When the given tab is selected, switch to the corresponding page in
         // the ViewPager.
         mViewPager.setCurrentItem(tab.getPosition());
     }
 
     @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) { }
+    public void onTabUnselected(TabLayout.Tab tab) { }
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
