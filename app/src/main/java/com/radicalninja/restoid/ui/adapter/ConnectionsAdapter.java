@@ -57,4 +57,8 @@ public class ConnectionsAdapter extends BaseAdapter {
         h.url.setText(con.getUrl());
         return convertView;
     }
+
+    public void add(Connection connection) {
+        mConnections.add(connection);
+    }
 }

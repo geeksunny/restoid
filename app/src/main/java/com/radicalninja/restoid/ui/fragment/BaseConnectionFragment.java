@@ -1,14 +1,11 @@
 package com.radicalninja.restoid.ui.fragment;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.widget.Toast;
 
 import com.radicalninja.restoid.application.App;
 import com.radicalninja.restoid.data.event.ConnectionDataEvent;
 import com.radicalninja.restoid.data.model.Connection;
 import com.radicalninja.restoid.ui.listener.ConnectionChangedListener;
-import com.radicalninja.restoid.util.Ln;
 import com.squareup.otto.Subscribe;
 
 public abstract class BaseConnectionFragment extends Fragment {
@@ -54,6 +51,7 @@ public abstract class BaseConnectionFragment extends Fragment {
     protected abstract void populateConnectionInfo(Connection connection);
 
     protected void onConnectionChanged() {
+        // TODO: add some sort of logic to not trigger this flag on first-load and subsequent re-loads.
         mConnectionChangedListener.didChange(mConnection);
     }
 }

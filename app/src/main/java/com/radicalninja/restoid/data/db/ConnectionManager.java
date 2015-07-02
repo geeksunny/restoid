@@ -26,7 +26,7 @@ public class ConnectionManager extends DatabaseManager<Connection, Integer> {
         return getObject(id);
     }
 
-    public boolean saveConnection(Connection connection) {
+    public SqlResult saveConnection(Connection connection) {
         return saveObject(connection);
     }
 

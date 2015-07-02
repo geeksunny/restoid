@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.application.App;
 import com.radicalninja.restoid.data.db.ConnectionManager;
+import com.radicalninja.restoid.data.db.SqlResult;
 import com.radicalninja.restoid.data.event.ConnectionDataEvent;
 import com.radicalninja.restoid.data.model.Connection;
 import com.radicalninja.restoid.data.model.QueryEntry;
@@ -190,7 +191,11 @@ public class MainActivity extends AppCompatActivity implements ActionBar.TabList
 
     private void saveRequest() {
         mConnection.setIsChanged(false);
-        mConnectionManager.saveConnection(mConnection);
+        SqlResult result = mConnectionManager.saveConnection(mConnection);
+        if (result.equals(SqlResult.CREATED)) {
+            mConnectionsAdapter.add(mConnection);
+            mConnectionsAdapter.notifyDataSetChanged();
+        }
     }
 
     private void selectItem(int position) {

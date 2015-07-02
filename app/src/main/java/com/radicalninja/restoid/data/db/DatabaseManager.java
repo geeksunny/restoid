@@ -43,14 +43,18 @@ public abstract class DatabaseManager<T, ID> {
         return null;
     }
 
-    protected boolean saveObject(T object) {
+    protected SqlResult saveObject(T object) {
         try {
             Dao.CreateOrUpdateStatus status = getDao().createOrUpdate(object);
-            return status.getNumLinesChanged() > 1;
+            if (status.isCreated()) {
+                return SqlResult.CREATED;
+            } else if (status.isUpdated()) {
+                return SqlResult.UPDATED;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
+        return SqlResult.NONE;
     }
 
     protected boolean deleteObject(T object) {
