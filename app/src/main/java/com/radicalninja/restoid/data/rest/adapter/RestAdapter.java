@@ -84,7 +84,7 @@ public class RestAdapter {
 
         @Override
         public Response execute(Request request) throws IOException {
-            mClient.setReadTimeout(App.getInstance().getTimeout(), TimeUnit.SECONDS);
+            mClient.setConnectTimeout(App.getInstance().getTimeout(), TimeUnit.SECONDS);
             mClient.setReadTimeout(App.getInstance().getTimeout(), TimeUnit.SECONDS);
 
             return new OkClient(mClient).execute(request);
