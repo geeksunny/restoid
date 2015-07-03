@@ -26,10 +26,9 @@ public class RequestFragment extends BaseConnectionFragment {
         FORMATTED, JSON, RAW
     }
 
-    private EditText mUrl;
+    private EditText mName, mUrl;
     private RadioGroup mRequestTypes, mResultsTypes;
     private TextView mResults;
-    private TextWatcher mTextWatcher;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -46,11 +45,24 @@ public class RequestFragment extends BaseConnectionFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_request, container, false);
+        mName = (EditText) rootView.findViewById(R.id.text_name);
         mUrl = (EditText) rootView.findViewById(R.id.text_url);
         mRequestTypes = (RadioGroup) rootView.findViewById(R.id.request_types);
         mResultsTypes = (RadioGroup) rootView.findViewById(R.id.results_types);
         mResults = (TextView) rootView.findViewById(R.id.text_results);
 
+        mName.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (getConnection() != null) {
+                    getConnection().setName(s.toString());
+                    onConnectionChanged();
+                }
+            }
+        });
         mUrl.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
@@ -130,9 +142,10 @@ public class RequestFragment extends BaseConnectionFragment {
 
     @Override
     protected void populateConnectionInfo(final Connection connection) {
-        // Set the URL, and then setup the textwatcher
+        // Set the name and URL
+        mName.setText(connection.getName());
         mUrl.setText(connection.getUrl());
-        // Checking the appropriate radio buttons...
+        // Checking the appropriate radio buttons
         int id = 0;
         switch (connection.getRequestType()) {
             case POST:

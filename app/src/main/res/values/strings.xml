@@ -7,9 +7,9 @@
     <string name="title_section4">Body</string>
     <string name="title_section5">&#8230;</string><!-- elipses -->
 
-    <string name="label_url">URL</string>
+    <string name="hint_name">Connection Name</string>
+    <string name="hint_url">URL</string>
     <string name="label_results">Results</string>
-    <string name="hint_url">http://api.example.com/endpoint</string>
     <string name="hint_results">Request results displayed here.</string>
     <string name="hint_header_key">Header Key</string>
     <string name="hint_header_value">Header Value</string>
