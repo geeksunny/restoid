@@ -9,6 +9,7 @@ import com.radicalninja.restoid.ui.fragment.RequestFragment;
 public class Connection {
 
     public static final String TABLE_NAME = "Connections";
+    public static final int DEFAULT_TIMEOUT = 20;
 
     @DatabaseField(generatedId = true)
     Integer _id;
@@ -33,6 +34,9 @@ public class Connection {
 
     @DatabaseField(columnName = "body")
     String bodyText = "";
+
+    @DatabaseField(columnName = "timeout")
+    Integer mTimeout = DEFAULT_TIMEOUT;
 
     boolean isChanged = false;
 
