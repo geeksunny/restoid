@@ -16,6 +16,8 @@ import com.radicalninja.restoid.data.event.ApiResponseEvent;
 import com.radicalninja.restoid.data.model.Connection;
 import com.squareup.otto.Subscribe;
 
+import java.util.Map;
+
 public class RequestFragment extends BaseConnectionFragment {
 
     public enum RequestType {
@@ -28,7 +30,7 @@ public class RequestFragment extends BaseConnectionFragment {
 
     private EditText mName, mUrl;
     private RadioGroup mRequestTypes, mResultsTypes;
-    private TextView mResults;
+    private TextView mLabelHeaders, mLabelBody, mResultsHeaders, mResultsBody;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -49,7 +51,11 @@ public class RequestFragment extends BaseConnectionFragment {
         mUrl = (EditText) rootView.findViewById(R.id.text_url);
         mRequestTypes = (RadioGroup) rootView.findViewById(R.id.request_types);
         mResultsTypes = (RadioGroup) rootView.findViewById(R.id.results_types);
-        mResults = (TextView) rootView.findViewById(R.id.text_results);
+
+        mLabelHeaders = (TextView) rootView.findViewById(R.id.text_header_headers);
+        mResultsHeaders = (TextView) rootView.findViewById(R.id.text_headers);
+        mLabelBody = (TextView) rootView.findViewById(R.id.text_header_body);
+        mResultsBody = (TextView) rootView.findViewById(R.id.text_results);
 
         mName.addTextChangedListener(new TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
@@ -137,7 +143,25 @@ public class RequestFragment extends BaseConnectionFragment {
 
     @Subscribe
     public void responseReceived(ApiResponseEvent event) {
-        mResults.setText(event.response);
+        if (event.success) {
+            toggleLabels(true);
+            StringBuilder sb = new StringBuilder();
+            for (Map.Entry<String, String> header : event.headers.entrySet()) {
+                sb.append(String.format("%s : %s\n", header.getKey(), header.getValue()));
+            }
+            mResultsHeaders.setText(sb.toString());
+            mResultsBody.setText(event.body);
+        } else {
+            toggleLabels(false);
+            mResultsBody.setText(event.body);
+        }
+    }
+
+    private void toggleLabels(boolean isVisible) {
+        int visibility = (isVisible) ? View.VISIBLE : View.GONE;
+        mLabelHeaders.setVisibility(visibility);
+        mResultsHeaders.setVisibility(visibility);
+        mLabelBody.setVisibility(visibility);
     }
 
     @Override

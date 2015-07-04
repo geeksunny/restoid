@@ -25,7 +25,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/text_name"
-                android:inputType="textUri"
                 android:hint="@string/hint_name"/>
 
         </android.support.design.widget.TextInputLayout>
@@ -123,10 +122,39 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/hint_results"
-            android:id="@+id/text_results"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/text_header_headers"
+            android:text="@string/label_results_headers"
+            android:textStyle="italic"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
             android:layout_below="@+id/results_types" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/hint_results_headers"
+            android:id="@+id/text_headers"
+            android:layout_below="@+id/text_header_headers" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/text_header_body"
+            android:text="@string/label_results_body"
+            android:textStyle="italic"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_below="@+id/text_headers" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/hint_results_body"
+            android:id="@+id/text_results"
+            android:layout_below="@+id/text_header_body" />
 
     </RelativeLayout>
 

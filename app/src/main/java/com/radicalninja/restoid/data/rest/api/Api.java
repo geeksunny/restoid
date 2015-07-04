@@ -12,10 +12,13 @@ import com.radicalninja.restoid.data.rest.client.RestClient;
 import com.radicalninja.restoid.data.rest.interceptor.RestInterceptor;
 import com.radicalninja.restoid.util.ResponseUtils;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
+import retrofit.client.Header;
 import retrofit.client.Response;
 
 public class Api {
@@ -25,15 +28,31 @@ public class Api {
     private Callback<Object> mCallback = new Callback<Object>() {
         @Override
         public void success(Object o, Response response) {
-            App.getOttoBus().post(new ApiResponseEvent(ResponseUtils.getResponseText(response)));
+            Map<String, String> headers = getHeadersMap(response.getHeaders());
+            App.getOttoBus().post(
+                    new ApiResponseEvent(headers, ResponseUtils.getResponseText(response)));
         }
 
         @Override
         public void failure(RetrofitError error) {
-            // TODO: will we need to post something else if there is a null response for some reason?
-            App.getOttoBus().post(new ApiResponseEvent(ResponseUtils.getResponseText(error.getResponse())));
+            if (error.getResponse() == null) {
+                App.getOttoBus().post(new ApiResponseEvent(error.getMessage()));
+            } else {
+                Map<String, String> headers = getHeadersMap(error.getResponse().getHeaders());
+                App.getOttoBus().post(
+                        new ApiResponseEvent(
+                                headers, ResponseUtils.getResponseText(error.getResponse())));
+            }
         }
     };
+
+    private Map<String, String> getHeadersMap(List<Header> headers) {
+        Map<String, String> map = new HashMap<>();
+        for (Header header : headers) {
+            map.put(header.getName(), header.getValue());
+        }
+        return map;
+    }
 
     public void sendRequest(Connection connection) {
         UrlEntry entry = new UrlEntry(connection.getUrl());
