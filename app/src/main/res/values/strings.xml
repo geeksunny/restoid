@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">RESToid</string>
 
+    <string name="drawer_header">Bookmarked Connections</string>
+
     <string name="title_section1">Request</string>
     <string name="title_section2">Headers</string>
     <string name="title_section3">Params</string>
