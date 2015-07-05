@@ -1,7 +1,6 @@
 package com.radicalninja.restoid.ui.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,7 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.data.model.Connection;
@@ -22,6 +21,7 @@ public class HeadersFragment extends BaseConnectionFragment {
 
     // Layout
     private RecyclerView mRecyclerView;
+    private TextView mMessage;
     private HeadersAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -41,13 +41,15 @@ public class HeadersFragment extends BaseConnectionFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_headers, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_headers_params, container, false);
 
         Ln.e("onCreateView!");
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_headers);
+        mMessage = (TextView) rootView.findViewById(R.id.message_noitems);
+        mMessage.setText(R.string.message_placeholder_headers);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new HeadersAdapter(getActivity());
+        mAdapter = new HeadersAdapter(getActivity(), mMessage, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;

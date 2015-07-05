@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.data.model.HeaderEntry;
@@ -18,7 +19,7 @@ import com.radicalninja.restoid.data.model.HeaderList;
 
 import java.util.List;
 
-public class HeadersAdapter extends RecyclerView.Adapter<HeadersAdapter.ViewHolder> {
+public class HeadersAdapter extends BasePlaceholderAdapter<HeadersAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public CheckBox enabled;
@@ -34,11 +35,14 @@ public class HeadersAdapter extends RecyclerView.Adapter<HeadersAdapter.ViewHold
     private HeaderList mHeaders = new HeaderList();
     private Context mContext;
 
-    public HeadersAdapter(Context context) {
+    public HeadersAdapter(Context context, TextView placeholderView, RecyclerView recyclerView) {
+        super(placeholderView, recyclerView);
         mContext = context;
     }
 
-    public HeadersAdapter(Context context, HeaderList headers) {
+    public HeadersAdapter(Context context, HeaderList headers,
+                          TextView placeholderView, RecyclerView recyclerView) {
+        super(placeholderView, recyclerView);
         mContext = context;
         mHeaders = headers;
     }
@@ -124,30 +128,36 @@ public class HeadersAdapter extends RecyclerView.Adapter<HeadersAdapter.ViewHold
     public void setHeaders(HeaderList headers) {
         this.mHeaders = headers;
         notifyDataSetChanged();
+        toggleViews();
     }
 
     public void add(HeaderEntry headerEntry) {
         mHeaders.add(headerEntry);
         notifyDataSetChanged();
+        toggleViews();
     }
 
     public void add(List<HeaderEntry> headers) {
         mHeaders.addAll(headers);
         notifyDataSetChanged();
+        toggleViews();
     }
 
     public void remove(HeaderEntry headerEntry) {
         mHeaders.remove(headerEntry);
         notifyDataSetChanged();
+        toggleViews();
     }
 
     public void remove(int location) {
         mHeaders.remove(location);
         notifyDataSetChanged();
+        toggleViews();
     }
 
     public void removeAll(List<HeaderEntry> headers) {
         mHeaders.removeAll(headers);
         notifyDataSetChanged();
+        toggleViews();
     }
 }

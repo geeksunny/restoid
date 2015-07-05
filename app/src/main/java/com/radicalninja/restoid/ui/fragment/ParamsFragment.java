@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.data.model.Connection;
@@ -20,6 +21,7 @@ public class ParamsFragment extends BaseConnectionFragment {
 
     // Layout
     private RecyclerView mRecyclerView;
+    private TextView mMessage;
     private ParamsAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -39,13 +41,15 @@ public class ParamsFragment extends BaseConnectionFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_headers, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_headers_params, container, false);
 
         Ln.e("onCreateView!");
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler_headers);
+        mMessage = (TextView) rootView.findViewById(R.id.message_noitems);
+        mMessage.setText(R.string.message_placeholder_params);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recycler);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new ParamsAdapter(getActivity());
+        mAdapter = new ParamsAdapter(getActivity(), mMessage, mRecyclerView);
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;

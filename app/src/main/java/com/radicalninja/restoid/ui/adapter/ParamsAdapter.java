@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.radicalninja.restoid.R;
 import com.radicalninja.restoid.data.model.QueryEntry;
@@ -16,7 +17,7 @@ import com.radicalninja.restoid.data.model.QueryEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ParamsAdapter extends RecyclerView.Adapter<ParamsAdapter.ViewHolder> {
+public class ParamsAdapter extends BasePlaceholderAdapter<ParamsAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public EditText key;
@@ -31,11 +32,14 @@ public class ParamsAdapter extends RecyclerView.Adapter<ParamsAdapter.ViewHolder
     private List<QueryEntry> mParams = new ArrayList<>();
     private Context mContext;
 
-    public ParamsAdapter(Context context) {
+    public ParamsAdapter(Context context, TextView placeholderView, RecyclerView recyclerView) {
+        super(placeholderView, recyclerView);
         mContext = context;
     }
 
-    public ParamsAdapter(Context context, List<QueryEntry> headers) {
+    public ParamsAdapter(Context context, List<QueryEntry> headers,
+                         TextView placeholderView, RecyclerView recyclerView) {
+        super(placeholderView, recyclerView);
         mContext = context;
         mParams = headers;
     }
@@ -109,30 +113,36 @@ public class ParamsAdapter extends RecyclerView.Adapter<ParamsAdapter.ViewHolder
     public void setHeaders(List<QueryEntry> headers) {
         this.mParams = headers;
         notifyDataSetChanged();
+        toggleViews();
     }
 
     public void add(QueryEntry queryEntry) {
         mParams.add(queryEntry);
         notifyDataSetChanged();
+        toggleViews();
     }
 
     public void add(List<QueryEntry> headers) {
         mParams.addAll(headers);
         notifyDataSetChanged();
+        toggleViews();
     }
 
     public void remove(QueryEntry queryEntry) {
         mParams.remove(queryEntry);
         notifyDataSetChanged();
+        toggleViews();
     }
 
     public void remove(int location) {
         mParams.remove(location);
         notifyDataSetChanged();
+        toggleViews();
     }
 
     public void removeAll(List<QueryEntry> headers) {
         mParams.removeAll(headers);
         notifyDataSetChanged();
+        toggleViews();
     }
 }
