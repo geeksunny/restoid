@@ -2,6 +2,7 @@ package com.radicalninja.restoid.ui.activity;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     final ConnectionManager mConnectionManager = new ConnectionManager(this);
     Drawer mDrawer;
+    FloatingActionButton mActionButton;
     List<Connection> mConnections;
     SectionsPagerAdapter mSectionsPagerAdapter;
     TabLayout mTabLayout;
@@ -83,9 +85,18 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
 
+        // Set up the floating action button
+        mActionButton = (FloatingActionButton) findViewById(R.id.floating_action_button);
+        mActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Unselect currently selected drawer item!
+                mConnection = new Connection();
+                connectionDataRequestReceived(null);
+            }
+        });
+
         // Set up the nav drawer with MaterialDrawer
-
-
         final int drawerItemOffset = 2;   // The number of items preceding the mConnections list.
         DrawerBuilder drawerBuilder = new DrawerBuilder()
                 .withActivity(this)
