@@ -95,6 +95,15 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 connectionDataRequestReceived(null);
             }
         });
+        mActionButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                // TODO: Duplicate the connection object here.
+                mConnection = new Connection(mConnection);
+                connectionDataRequestReceived(null);
+                return true;
+            }
+        });
 
         // Set up the nav drawer with MaterialDrawer
         final int drawerItemOffset = 2;   // The number of items preceding the mConnections list.

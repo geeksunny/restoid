@@ -40,6 +40,19 @@ public class Connection {
 
     boolean isChanged = false;
 
+    public Connection() { }
+
+    public Connection(Connection connection) {
+        mName = String.format("%s Copy", connection.mName);
+        mUrl = connection.mUrl;
+        mRequestType = connection.mRequestType;
+        mResultType = connection.mResultType;
+        mHeaders = new HeaderList(connection.mHeaders);
+        mQuery = new QueryList(connection.mQuery);
+        bodyText = connection.bodyText;
+        mTimeout = connection.mTimeout;
+    }
+
     public String getName() {
         return mName;
     }
