@@ -1,5 +1,7 @@
 package com.radicalninja.restoid.ui.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -126,6 +128,39 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     selectItem(position);
                 }
                 return false;
+            }
+        });
+        drawerBuilder.withOnDrawerItemLongClickListener(new Drawer.OnDrawerItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l, IDrawerItem iDrawerItem) {
+                int bookmarkPosition = position - drawerItemOffset;
+                if (mConnections.size() > bookmarkPosition) {
+                    DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which) {
+                                case AlertDialog.BUTTON_POSITIVE:
+                                    // TODO: unselect current selected item
+                                    mDrawer.removeItem(position);
+                                    mConnections.remove(mConnection);
+                                    mConnectionManager.deleteConnection(mConnection);
+                                    Toast.makeText(MainActivity.this, R.string.toast_bookmark_deleted, Toast.LENGTH_SHORT).show();
+                                    break;
+                                case AlertDialog.BUTTON_NEGATIVE:
+                                default:
+                                    Toast.makeText(MainActivity.this, R.string.toast_bookmark_delete_canceled, Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
+                        }
+                    };
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setMessage(R.string.dialog_message_delete)
+                            .setPositiveButton(R.string.dialog_button_yes, listener)
+                            .setNegativeButton(R.string.dialog_button_no, listener)
+                            .setCancelable(true)
+                            .show();
+                }
+                return false;   // TODO: Ensure this is what we want to return here.
             }
         });
         mDrawer = drawerBuilder.build();

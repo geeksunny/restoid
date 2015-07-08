@@ -31,6 +31,11 @@
     <string name="radio_json">JSON</string>
     <string name="message_placeholder_headers">No headers set.\nTap ADD to add a header.</string>
     <string name="message_placeholder_params">No query parameters set.\nTap ADD to add a query parameter.</string>
+    <string name="dialog_message_delete">Are you sure you want to delete this connection?</string>
+    <string name="dialog_button_yes">YES</string>
+    <string name="dialog_button_no">NO</string>
+    <string name="toast_bookmark_deleted">Connection bookmark was deleted.</string>
+    <string name="toast_bookmark_delete_canceled">Bookmark delete operation cancelled.</string>
 
     <string name="message_error_nourl">Please specify a URL for your request.</string>
 
