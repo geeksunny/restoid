@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         mActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Unselect currently selected drawer item!
+                deselectBookmark();
                 mConnection = new Connection();
                 connectionDataRequestReceived(null);
             }
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         mActionButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                // TODO: Duplicate the connection object here.
+                deselectBookmark();
                 mConnection = new Connection(mConnection);
                 connectionDataRequestReceived(null);
                 return true;
@@ -123,8 +123,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         drawerBuilder.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
             @Override
             public boolean onItemClick(AdapterView<?> adapterView, View view, int position, long l, IDrawerItem iDrawerItem) {
+                Ln.e("Position before: %d", position);
                 position -= drawerItemOffset;
-                if (mConnections.size() > position) {
+                Ln.e("Position after: %d", position);
+                if (mConnections.size() > position && position >= 0) {
                     selectItem(position);
                 }
                 return false;
@@ -133,17 +135,18 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         drawerBuilder.withOnDrawerItemLongClickListener(new Drawer.OnDrawerItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, final int position, long l, IDrawerItem iDrawerItem) {
-                int bookmarkPosition = position - drawerItemOffset;
+                final int bookmarkPosition = position - drawerItemOffset;
                 if (mConnections.size() > bookmarkPosition) {
                     DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             switch (which) {
                                 case AlertDialog.BUTTON_POSITIVE:
-                                    // TODO: unselect current selected item
+                                    //deselectBookmark();
                                     mDrawer.removeItem(position);
-                                    mConnections.remove(mConnection);
-                                    mConnectionManager.deleteConnection(mConnection);
+                                    Connection connection = mConnections.get(bookmarkPosition);
+                                    mConnections.remove(connection);
+                                    mConnectionManager.deleteConnection(connection);
                                     Toast.makeText(MainActivity.this, R.string.toast_bookmark_deleted, Toast.LENGTH_SHORT).show();
                                     break;
                                 case AlertDialog.BUTTON_NEGATIVE:
@@ -160,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             .setCancelable(true)
                             .show();
                 }
-                return false;   // TODO: Ensure this is what we want to return here.
+                return true;
             }
         });
         mDrawer = drawerBuilder.build();
@@ -253,8 +256,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         SqlResult result = mConnectionManager.saveConnection(mConnection);
         if (result.equals(SqlResult.CREATED)) {
             mConnections.add(mConnection);
-            mDrawer.addItem(getConnectionDrawerItem(mConnection));
-            // TODO: Add connection to drawer here.
+            PrimaryDrawerItem item = getConnectionDrawerItem(mConnection);
+            mDrawer.addItem(item);
+            mDrawer.setSelection(mDrawer.getDrawerItems().size()-1, false);
         }
     }
 
@@ -358,4 +362,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         item.withName(connection.getName()).setDescription(connection.getUrl());
         return item;
     }
+
+    private void deselectBookmark() {
+        mDrawer.setSelection(0, false);
+    }
+
 }
