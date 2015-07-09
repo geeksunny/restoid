@@ -116,6 +116,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 .addDrawerItems(
                         new SectionDrawerItem().withName(R.string.drawer_header).setDivider(false),
                         new DividerDrawerItem()
+                ).addStickyDrawerItems(
+                        new PrimaryDrawerItem().withName(R.string.action_help).withIcon(R.drawable.ic_action_help).withCheckable(false)
+                        //,
+                        //new PrimaryDrawerItem().withName(R.string.action_settings).withIcon(R.drawable.ic_action_settings).withCheckable(false)
                 );
         for (Connection connection : mConnections) {
             drawerBuilder.addDrawerItems(getConnectionDrawerItem(connection));
@@ -123,6 +127,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         drawerBuilder.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
             @Override
             public boolean onItemClick(AdapterView<?> adapterView, View view, int position, long l, IDrawerItem iDrawerItem) {
+                if (position == -1) {
+                    displayHelp();
+                    return false;
+                }
                 Ln.e("Position before: %d", position);
                 position -= drawerItemOffset;
                 Ln.e("Position after: %d", position);
@@ -237,8 +245,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         int id = item.getItemId();
 
         switch (id) {
-            case R.id.action_settings:
-                return true;
             case R.id.action_send:
                 sendRequest();
                 return true;
@@ -367,4 +373,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         mDrawer.setSelection(0, false);
     }
 
+    private void displayHelp() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.action_help)
+                .setMessage(R.string.dialog_message_help)
+                .setPositiveButton(R.string.dialog_button_help, null)
+                .show();
+    }
 }

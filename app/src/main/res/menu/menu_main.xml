@@ -6,7 +6,5 @@
         android:orderInCategory="98" app:showAsAction="always" />
     <item android:id="@+id/action_save" android:title="@string/action_save"
         android:orderInCategory="99" app:showAsAction="always" />
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
 
 </menu>
